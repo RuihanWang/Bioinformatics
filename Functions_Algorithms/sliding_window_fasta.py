@@ -33,8 +33,9 @@ if __name__ == "__main__":
     if arg_count != 3:
         raise Exception("Enter right parameter")
     else:
-
+        print(">NC_001477.1 Dengue virus 1, complete genome")
         kmers = get_kmers(int(sys.argv[1]),sys.argv[2])
         for kmer,gc in kmers.items():
-            print(kmer," ",gc)
+           
+            print("{}\t{:.2f}".format(kmer,float(gc)))
 

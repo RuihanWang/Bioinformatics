@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-
+#basic_functions.py
 
 def multiply(x,y):
     return x*y
 
-def hello_name (a):
+def hello_name (a=""):
     if a:
-        print("Hello,",a,"!")
+        return "Hello, {}!".format(a)
     else:
-        print("Hello,","you!")
+        return "Hello, you!"
 
 def less_than_ten (a):
     b = []
@@ -18,5 +18,4 @@ def less_than_ten (a):
         else:
             continue;
     return b
-print(less_than_ten([1, 5, 81, 10, 8, 2, 102]))
 

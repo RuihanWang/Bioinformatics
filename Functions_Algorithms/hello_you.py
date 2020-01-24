@@ -2,15 +2,16 @@
 # hello_you.py
 
 import sys
-def hello_name(s):
+def hello_name(s=""):
     if s:
-        print("Hello {}!".format(s))
+        return "Hello, {}!".format(s)
     else:
-        print("Hello you!")
+        return "Hello, you!"
 if __name__ == "__main__" :
     arg_count = len(sys.argv)-1
     if arg_count > 0:
 
-        hello_name(sys.argv[1])
-    else:hello_name("")
+        print(hello_name(sys.argv[1]))
+    else:
+        print(hello_name())
 
