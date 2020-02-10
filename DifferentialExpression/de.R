@@ -29,6 +29,12 @@ for (result in resultsNames(dds)){
                         dfAll <- rbind(dfAll, dfRes)
                     }
 }
+
+
+dim(dfAll)
 head(dfAll)
-write.csv(dfAll, file="dfAll.csv")
+head(tx2gene)
+deAnnotated = merge(dfAll,tx2gene, by.x=0,by.y="ko")
+head(deAnnotated)
+write.csv(deAnnotated, file="deAnnotated.csv")
 
