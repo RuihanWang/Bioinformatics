@@ -1,0 +1,25 @@
+{
+    "read_files": [
+        "/scratch/SampleDataFiles/Paired/Aip14.R1.paired.fastq",
+        "/scratch/SampleDataFiles/Paired/Aip14.R2.paired.fastq"
+    ],
+    "expected_format": "IU",
+    "compatible_fragment_ratio": 1.0,
+    "num_compatible_fragments": 30323,
+    "num_assigned_fragments": 30323,
+    "num_frags_with_concordant_consistent_mappings": 29102,
+    "num_frags_with_inconsistent_or_orphan_mappings": 1222,
+    "strand_mapping_bias": 0.5318191189608962,
+    "MSF": 0,
+    "OSF": 0,
+    "ISF": 13625,
+    "MSR": 0,
+    "OSR": 0,
+    "ISR": 15477,
+    "SF": 584,
+    "SR": 638,
+    "MU": 0,
+    "OU": 0,
+    "IU": 0,
+    "U": 0
+}

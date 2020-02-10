@@ -1,0 +1,24 @@
+[2020-02-08 12:51:58.463] [jointLog] [info] Fragment incompatibility prior below threshold.  Incompatible fragments will be ignored.
+[2020-02-08 12:51:58.463] [jointLog] [info] Usage of --validateMappings implies use of minScoreFraction. Since not explicitly specified, it is being set to 0.65
+[2020-02-08 12:51:58.463] [jointLog] [info] Usage of --validateMappings implies use of range factorization. rangeFactorizationBins is being set to 4
+[2020-02-08 12:51:58.463] [jointLog] [info] Usage of --validateMappings implies a default consensus slack of 1. Setting consensusSlack to 1.
+[2020-02-08 12:51:58.463] [jointLog] [info] parsing read library format
+[2020-02-08 12:51:58.463] [jointLog] [info] There is 1 library.
+[2020-02-08 12:52:08.619] [jointLog] [info] Fragment incompatibility prior below threshold.  Incompatible fragments will be ignored.
+[2020-02-08 12:52:08.619] [jointLog] [info] Usage of --validateMappings implies use of minScoreFraction. Since not explicitly specified, it is being set to 0.65
+[2020-02-08 12:52:08.619] [jointLog] [info] Usage of --validateMappings implies use of range factorization. rangeFactorizationBins is being set to 4
+[2020-02-08 12:52:08.619] [jointLog] [info] Usage of --validateMappings implies a default consensus slack of 1. Setting consensusSlack to 1.
+[2020-02-08 12:52:08.619] [jointLog] [info] parsing read library format
+[2020-02-08 12:52:08.619] [jointLog] [info] There is 1 library.
+[2020-02-08 12:52:39.046] [jointLog] [info] Fragment incompatibility prior below threshold.  Incompatible fragments will be ignored.
+[2020-02-08 12:52:39.046] [jointLog] [info] Usage of --validateMappings implies use of minScoreFraction. Since not explicitly specified, it is being set to 0.65
+[2020-02-08 12:52:39.046] [jointLog] [info] Usage of --validateMappings implies use of range factorization. rangeFactorizationBins is being set to 4
+[2020-02-08 12:52:39.046] [jointLog] [info] Usage of --validateMappings implies a default consensus slack of 1. Setting consensusSlack to 1.
+[2020-02-08 12:52:39.046] [jointLog] [info] parsing read library format
+[2020-02-08 12:52:39.046] [jointLog] [info] There is 1 library.
+[2020-02-08 12:53:17.181] [jointLog] [info] Fragment incompatibility prior below threshold.  Incompatible fragments will be ignored.
+[2020-02-08 12:53:17.181] [jointLog] [info] Usage of --validateMappings implies use of minScoreFraction. Since not explicitly specified, it is being set to 0.65
+[2020-02-08 12:53:17.181] [jointLog] [info] Usage of --validateMappings implies use of range factorization. rangeFactorizationBins is being set to 4
+[2020-02-08 12:53:17.181] [jointLog] [info] Usage of --validateMappings implies a default consensus slack of 1. Setting consensusSlack to 1.
+[2020-02-08 12:53:17.181] [jointLog] [info] parsing read library format
+[2020-02-08 12:53:17.181] [jointLog] [info] There is 1 library.

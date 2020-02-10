@@ -1,0 +1,41 @@
+[2020-02-10 17:55:08.640] [jointLog] [info] Fragment incompatibility prior below threshold.  Incompatible fragments will be ignored.
+[2020-02-10 17:55:08.640] [jointLog] [info] Usage of --validateMappings implies use of minScoreFraction. Since not explicitly specified, it is being set to 0.65
+[2020-02-10 17:55:08.640] [jointLog] [info] Usage of --validateMappings implies use of range factorization. rangeFactorizationBins is being set to 4
+[2020-02-10 17:55:08.640] [jointLog] [info] Usage of --validateMappings implies a default consensus slack of 1. Setting consensusSlack to 1.
+[2020-02-10 17:55:08.640] [jointLog] [info] parsing read library format
+[2020-02-10 17:55:08.640] [jointLog] [info] There is 1 library.
+[2020-02-10 17:55:08.720] [jointLog] [info] Loading Quasi index
+[2020-02-10 17:55:08.720] [jointLog] [info] Loading 32-bit quasi index
+[2020-02-10 17:55:09.476] [jointLog] [info] done
+[2020-02-10 17:55:09.476] [jointLog] [info] Index contained 34,774 targets
+[2020-02-10 17:55:09.877] [jointLog] [info] Thread saw mini-batch with a maximum of 0.03% zero probability fragments
+[2020-02-10 17:55:09.880] [jointLog] [info] Thread saw mini-batch with a maximum of 0.06% zero probability fragments
+[2020-02-10 17:55:09.886] [jointLog] [info] Thread saw mini-batch with a maximum of 0.04% zero probability fragments
+[2020-02-10 17:55:09.892] [jointLog] [info] Thread saw mini-batch with a maximum of 0.04% zero probability fragments
+[2020-02-10 17:55:09.906] [jointLog] [info] Thread saw mini-batch with a maximum of 0.06% zero probability fragments
+[2020-02-10 17:55:09.913] [jointLog] [info] Thread saw mini-batch with a maximum of 0.02% zero probability fragments
+[2020-02-10 17:55:09.923] [jointLog] [info] Thread saw mini-batch with a maximum of 0.10% zero probability fragments
+[2020-02-10 17:55:09.946] [jointLog] [info] Computed 8,934 rich equivalence classes for further processing
+[2020-02-10 17:55:09.946] [jointLog] [info] Counted 31,611 total reads in the equivalence classes 
+[2020-02-10 17:55:09.966] [jointLog] [warning] Only 31611 fragments were mapped, but the number of burn-in fragments was set to 5000000.
+The effective lengths have been computed using the observed mappings.
+
+[2020-02-10 17:55:09.966] [jointLog] [info] Mapping rate = 83.3316%
+
+[2020-02-10 17:55:09.966] [jointLog] [info] finished quantifyLibrary()
+[2020-02-10 17:55:09.966] [jointLog] [info] Starting optimizer
+[2020-02-10 17:55:09.978] [jointLog] [info] Marked 0 weighted equivalence classes as degenerate
+[2020-02-10 17:55:09.979] [jointLog] [info] iteration = 0 | max rel diff. = 68.984
+[2020-02-10 17:55:10.040] [jointLog] [info] iteration = 100 | max rel diff. = 0.0050067
+[2020-02-10 17:55:10.041] [jointLog] [info] Finished optimizer
+[2020-02-10 17:55:10.041] [jointLog] [info] writing output 
+
+[2020-02-10 17:55:10.098] [jointLog] [warning] NOTE: Read Lib [[ /scratch/SampleDataFiles/Paired/Aip32.R1.paired.fastq, /scratch/SampleDataFiles/Paired/Aip32.R2.paired.fastq]] :
+
+Detected a *potential* strand bias > 1% in an unstranded protocol check the file: quant/Aip32/lib_format_counts.json for details
+
+[2020-02-10 17:55:09.947] [fileLog] [info] 
+At end of round 0
+==================
+Observed 37934 total fragments (37934 in most recent round)
+

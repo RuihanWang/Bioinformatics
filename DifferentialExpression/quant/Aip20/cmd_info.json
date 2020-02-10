@@ -1,0 +1,10 @@
+{
+    "salmon_version": "0.12.0",
+    "libType": "IU",
+    "mates1": "/scratch/SampleDataFiles/Paired/Aip20.R1.paired.fastq",
+    "mates2": "/scratch/SampleDataFiles/Paired/Aip20.R2.paired.fastq",
+    "index": "AipIndex",
+    "validateMappings": [],
+    "output": "quant/Aip20",
+    "auxDir": "aux_info"
+}
