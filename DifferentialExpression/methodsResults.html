@@ -1550,6 +1550,3679 @@ div.tocify {
 <div id="methods" class="section level2">
 <h2>Methods</h2>
 <p>There are mainly two steps to do a differential express analysis. First we need to estimate relative abundance with salmon <span class="citation">(Raithel et al. 2016)</span>. Second we will apply statistical models to test the differential expression between groups with tximport.<span class="citation">(Soneson, Love, and Robinson 2015)</span> Then use DESeq2<span class="citation">(Caballero-Solares et al. 2018)</span> to test the results.</p>
+<pre class="r"><code>library(knitr)
+deannotated &lt;- read.csv(&quot;deAnnotated.csv&quot;, header = TRUE)
+kable(deannotated)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">X</th>
+<th align="left">Row.names</th>
+<th align="right">log2FoldChange</th>
+<th align="right">padj</th>
+<th align="left">Factor</th>
+<th align="left">trans</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">ko:K00024</td>
+<td align="right">-0.8911610</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9267_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">ko:K00024</td>
+<td align="right">-0.8911610</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9446_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">ko:K00031</td>
+<td align="right">-0.6698141</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9440_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">ko:K00128</td>
+<td align="right">-0.2299678</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9333_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="left">ko:K00134</td>
+<td align="right">1.5188727</td>
+<td align="right">0.7036797</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9495_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="left">ko:K00134</td>
+<td align="right">1.5188727</td>
+<td align="right">0.7036797</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9495_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="left">ko:K00140</td>
+<td align="right">0.1496483</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8733_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">ko:K00207</td>
+<td align="right">0.3422757</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9160_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="left">ko:K00235</td>
+<td align="right">-0.1471321</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9363_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="left">ko:K00249</td>
+<td align="right">0.2523667</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9283_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">11</td>
+<td align="left">ko:K00262</td>
+<td align="right">0.0499080</td>
+<td align="right">0.9768929</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9017_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">12</td>
+<td align="left">ko:K00262</td>
+<td align="right">0.0499080</td>
+<td align="right">0.9768929</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9017_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">13</td>
+<td align="left">ko:K00331</td>
+<td align="right">0.7305390</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7353_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">14</td>
+<td align="left">ko:K00333</td>
+<td align="right">-0.9082631</td>
+<td align="right">0.4843917</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6874_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">15</td>
+<td align="left">ko:K00338</td>
+<td align="right">0.4502014</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6548_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">16</td>
+<td align="left">ko:K00357</td>
+<td align="right">0.5028460</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN3286_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">17</td>
+<td align="left">ko:K00411</td>
+<td align="right">0.1020997</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9439_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">18</td>
+<td align="left">ko:K00413</td>
+<td align="right">0.5792505</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6884_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">19</td>
+<td align="left">ko:K00456</td>
+<td align="right">-0.5810272</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8927_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">20</td>
+<td align="left">ko:K00456</td>
+<td align="right">-0.5810272</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8927_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">21</td>
+<td align="left">ko:K00469</td>
+<td align="right">0.1583665</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8473_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">22</td>
+<td align="left">ko:K00500</td>
+<td align="right">0.1858561</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7120_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">23</td>
+<td align="left">ko:K00522</td>
+<td align="right">-0.7371532</td>
+<td align="right">0.3517036</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9408_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">24</td>
+<td align="left">ko:K00522</td>
+<td align="right">-0.7371532</td>
+<td align="right">0.3517036</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8161_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">25</td>
+<td align="left">ko:K00544</td>
+<td align="right">-0.8405831</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9537_c1_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">26</td>
+<td align="left">ko:K00616</td>
+<td align="right">-1.5880081</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5681_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">27</td>
+<td align="left">ko:K00643</td>
+<td align="right">0.2887674</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9578_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">28</td>
+<td align="left">ko:K00799</td>
+<td align="right">-0.7302455</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8862_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">29</td>
+<td align="left">ko:K00814</td>
+<td align="right">-0.3574460</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8382_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">30</td>
+<td align="left">ko:K00819</td>
+<td align="right">0.7143451</td>
+<td align="right">0.2531007</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9656_c1_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">31</td>
+<td align="left">ko:K00819</td>
+<td align="right">0.7143451</td>
+<td align="right">0.2531007</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9656_c1_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">32</td>
+<td align="left">ko:K00819</td>
+<td align="right">0.7143451</td>
+<td align="right">0.2531007</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9656_c1_g1_i5</td>
+</tr>
+<tr class="odd">
+<td align="right">33</td>
+<td align="left">ko:K00819</td>
+<td align="right">0.7143451</td>
+<td align="right">0.2531007</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9656_c1_g1_i7</td>
+</tr>
+<tr class="even">
+<td align="right">34</td>
+<td align="left">ko:K00819</td>
+<td align="right">0.7143451</td>
+<td align="right">0.2531007</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9656_c1_g1_i8</td>
+</tr>
+<tr class="odd">
+<td align="right">35</td>
+<td align="left">ko:K00819</td>
+<td align="right">0.7143451</td>
+<td align="right">0.2531007</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9656_c1_g1_i9</td>
+</tr>
+<tr class="even">
+<td align="right">36</td>
+<td align="left">ko:K00819</td>
+<td align="right">0.7143451</td>
+<td align="right">0.2531007</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9656_c1_g1_i4</td>
+</tr>
+<tr class="odd">
+<td align="right">37</td>
+<td align="left">ko:K00856</td>
+<td align="right">-0.1426502</td>
+<td align="right">0.9454341</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7955_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">38</td>
+<td align="left">ko:K00933</td>
+<td align="right">-0.1045008</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN15607_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">39</td>
+<td align="left">ko:K00933</td>
+<td align="right">-0.1045008</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9644_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">40</td>
+<td align="left">ko:K00939</td>
+<td align="right">-0.2297455</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9241_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">41</td>
+<td align="left">ko:K00940</td>
+<td align="right">0.1142428</td>
+<td align="right">0.9486562</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN561_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">42</td>
+<td align="left">ko:K00940</td>
+<td align="right">0.1142428</td>
+<td align="right">0.9486562</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8388_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">43</td>
+<td align="left">ko:K00967</td>
+<td align="right">0.3491286</td>
+<td align="right">0.4843917</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9400_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">44</td>
+<td align="left">ko:K01070</td>
+<td align="right">-1.3612466</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN546_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">45</td>
+<td align="left">ko:K01206</td>
+<td align="right">0.0063514</td>
+<td align="right">0.9984162</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8938_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">46</td>
+<td align="left">ko:K01206</td>
+<td align="right">0.0063514</td>
+<td align="right">0.9984162</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9427_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">47</td>
+<td align="left">ko:K01251</td>
+<td align="right">1.2977042</td>
+<td align="right">0.1472124</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9231_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">48</td>
+<td align="left">ko:K01363</td>
+<td align="right">0.2687017</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8750_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">49</td>
+<td align="left">ko:K01365</td>
+<td align="right">-0.0451614</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9355_c0_g1_i5</td>
+</tr>
+<tr class="even">
+<td align="right">50</td>
+<td align="left">ko:K01365</td>
+<td align="right">-0.0451614</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9653_c1_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">51</td>
+<td align="left">ko:K01365</td>
+<td align="right">-0.0451614</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9355_c0_g1_i4</td>
+</tr>
+<tr class="even">
+<td align="right">52</td>
+<td align="left">ko:K01365</td>
+<td align="right">-0.0451614</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9355_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">53</td>
+<td align="left">ko:K01365</td>
+<td align="right">-0.0451614</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9355_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">54</td>
+<td align="left">ko:K01379</td>
+<td align="right">0.2657233</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9627_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">55</td>
+<td align="left">ko:K01379</td>
+<td align="right">0.2657233</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9627_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">56</td>
+<td align="left">ko:K01551</td>
+<td align="right">-0.0229592</td>
+<td align="right">0.9984162</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN14997_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">57</td>
+<td align="left">ko:K01596</td>
+<td align="right">0.7606186</td>
+<td align="right">0.0956522</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9611_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">58</td>
+<td align="left">ko:K01596</td>
+<td align="right">0.7606186</td>
+<td align="right">0.0956522</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9611_c0_g2_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">59</td>
+<td align="left">ko:K01623</td>
+<td align="right">-1.0363064</td>
+<td align="right">0.1870788</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9132_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">60</td>
+<td align="left">ko:K01681</td>
+<td align="right">-0.2119866</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9214_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">61</td>
+<td align="left">ko:K01689</td>
+<td align="right">0.8458225</td>
+<td align="right">0.3315310</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9573_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">62</td>
+<td align="left">ko:K01697</td>
+<td align="right">0.1916702</td>
+<td align="right">0.9486562</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9402_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">63</td>
+<td align="left">ko:K01697</td>
+<td align="right">0.1916702</td>
+<td align="right">0.9486562</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9402_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">64</td>
+<td align="left">ko:K01758</td>
+<td align="right">0.0866517</td>
+<td align="right">0.9682351</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9608_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">65</td>
+<td align="left">ko:K01758</td>
+<td align="right">0.0866517</td>
+<td align="right">0.9682351</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9608_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">66</td>
+<td align="left">ko:K01875</td>
+<td align="right">0.3788097</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8298_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">67</td>
+<td align="left">ko:K01881</td>
+<td align="right">1.0629746</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9340_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">68</td>
+<td align="left">ko:K01889</td>
+<td align="right">-0.2310848</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8969_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">69</td>
+<td align="left">ko:K01890</td>
+<td align="right">-0.3496424</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9391_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">70</td>
+<td align="left">ko:K01892</td>
+<td align="right">-0.8178518</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7780_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">71</td>
+<td align="left">ko:K01893</td>
+<td align="right">-0.5168140</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9570_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">72</td>
+<td align="left">ko:K01953</td>
+<td align="right">-0.5701237</td>
+<td align="right">0.7194275</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9223_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">73</td>
+<td align="left">ko:K02105</td>
+<td align="right">-0.1797793</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9525_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">74</td>
+<td align="left">ko:K02111</td>
+<td align="right">-2.1736214</td>
+<td align="right">0.6313213</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9485_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">75</td>
+<td align="left">ko:K02112</td>
+<td align="right">-0.1128712</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN2467_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">76</td>
+<td align="left">ko:K02112</td>
+<td align="right">-0.1128712</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN2467_c0_g2_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">77</td>
+<td align="left">ko:K02112</td>
+<td align="right">-0.1128712</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9596_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">78</td>
+<td align="left">ko:K02146</td>
+<td align="right">-0.6584748</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8095_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">79</td>
+<td align="left">ko:K02149</td>
+<td align="right">-0.2076533</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5998_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">80</td>
+<td align="left">ko:K02152</td>
+<td align="right">0.0025878</td>
+<td align="right">0.9984162</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN3619_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">81</td>
+<td align="left">ko:K02155</td>
+<td align="right">-0.3231183</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8737_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">82</td>
+<td align="left">ko:K02183</td>
+<td align="right">0.4005054</td>
+<td align="right">0.4258956</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9151_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">83</td>
+<td align="left">ko:K02183</td>
+<td align="right">0.4005054</td>
+<td align="right">0.4258956</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9426_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">84</td>
+<td align="left">ko:K02183</td>
+<td align="right">0.4005054</td>
+<td align="right">0.4258956</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7877_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">85</td>
+<td align="left">ko:K02219</td>
+<td align="right">0.3849976</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN762_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">86</td>
+<td align="left">ko:K02267</td>
+<td align="right">-0.9332154</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN2939_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">87</td>
+<td align="left">ko:K02437</td>
+<td align="right">0.1303835</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8080_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">88</td>
+<td align="left">ko:K02503</td>
+<td align="right">-1.1605741</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6041_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">89</td>
+<td align="left">ko:K02503</td>
+<td align="right">-1.1605741</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6041_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">90</td>
+<td align="left">ko:K02635</td>
+<td align="right">-0.0913679</td>
+<td align="right">0.9486562</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN1635_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">91</td>
+<td align="left">ko:K02639</td>
+<td align="right">-1.5910228</td>
+<td align="right">0.9081818</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5565_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">92</td>
+<td align="left">ko:K02703</td>
+<td align="right">0.6845213</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN24979_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">93</td>
+<td align="left">ko:K02705</td>
+<td align="right">0.7345379</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8116_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">94</td>
+<td align="left">ko:K02706</td>
+<td align="right">-0.2227566</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7881_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">95</td>
+<td align="left">ko:K02725</td>
+<td align="right">-1.1705080</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6523_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">96</td>
+<td align="left">ko:K02726</td>
+<td align="right">0.2344044</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6781_c0_g2_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">97</td>
+<td align="left">ko:K02726</td>
+<td align="right">0.2344044</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6781_c0_g3_i1</td>
+</tr>
+<tr class="even">
+<td align="right">98</td>
+<td align="left">ko:K02726</td>
+<td align="right">0.2344044</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6781_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">99</td>
+<td align="left">ko:K02728</td>
+<td align="right">-1.0884460</td>
+<td align="right">0.9211363</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5721_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">100</td>
+<td align="left">ko:K02732</td>
+<td align="right">0.1940562</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7419_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">101</td>
+<td align="left">ko:K02865</td>
+<td align="right">-0.3019123</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7617_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">102</td>
+<td align="left">ko:K02866</td>
+<td align="right">-0.2075947</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7313_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">103</td>
+<td align="left">ko:K02870</td>
+<td align="right">0.3616856</td>
+<td align="right">0.5261107</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9245_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">104</td>
+<td align="left">ko:K02872</td>
+<td align="right">-0.8205367</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8160_c0_g2_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">105</td>
+<td align="left">ko:K02873</td>
+<td align="right">0.4334502</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7127_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">106</td>
+<td align="left">ko:K02877</td>
+<td align="right">1.0985307</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7188_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">107</td>
+<td align="left">ko:K02880</td>
+<td align="right">-0.2444183</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8253_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">108</td>
+<td align="left">ko:K02882</td>
+<td align="right">-0.2109579</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9152_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">109</td>
+<td align="left">ko:K02885</td>
+<td align="right">-0.6230132</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8670_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">110</td>
+<td align="left">ko:K02889</td>
+<td align="right">0.0749219</td>
+<td align="right">0.9583297</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7443_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">111</td>
+<td align="left">ko:K02896</td>
+<td align="right">-0.1427981</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7748_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">112</td>
+<td align="left">ko:K02896</td>
+<td align="right">-0.1427981</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7610_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">113</td>
+<td align="left">ko:K02898</td>
+<td align="right">-0.5995438</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7637_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">114</td>
+<td align="left">ko:K02901</td>
+<td align="right">-0.1593624</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN17630_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">115</td>
+<td align="left">ko:K02901</td>
+<td align="right">-0.1593624</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8392_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">116</td>
+<td align="left">ko:K02905</td>
+<td align="right">0.0656339</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8861_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">117</td>
+<td align="left">ko:K02908</td>
+<td align="right">0.7025843</td>
+<td align="right">0.8580913</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN18948_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">118</td>
+<td align="left">ko:K02908</td>
+<td align="right">0.7025843</td>
+<td align="right">0.8580913</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8915_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">119</td>
+<td align="left">ko:K02908</td>
+<td align="right">0.7025843</td>
+<td align="right">0.8580913</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN18948_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">120</td>
+<td align="left">ko:K02910</td>
+<td align="right">0.3987956</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6099_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">121</td>
+<td align="left">ko:K02915</td>
+<td align="right">-0.0606043</td>
+<td align="right">0.9682351</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8347_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">122</td>
+<td align="left">ko:K02918</td>
+<td align="right">-0.3152597</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5705_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">123</td>
+<td align="left">ko:K02918</td>
+<td align="right">-0.3152597</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5705_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">124</td>
+<td align="left">ko:K02920</td>
+<td align="right">-0.2221249</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8637_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">125</td>
+<td align="left">ko:K02923</td>
+<td align="right">-0.4495830</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN4420_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">126</td>
+<td align="left">ko:K02924</td>
+<td align="right">-0.5467490</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6006_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">127</td>
+<td align="left">ko:K02929</td>
+<td align="right">-0.7070752</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8062_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">128</td>
+<td align="left">ko:K02929</td>
+<td align="right">-0.7070752</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN13571_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">129</td>
+<td align="left">ko:K02929</td>
+<td align="right">-0.7070752</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8062_c0_g3_i1</td>
+</tr>
+<tr class="even">
+<td align="right">130</td>
+<td align="left">ko:K02929</td>
+<td align="right">-0.7070752</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8062_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">131</td>
+<td align="left">ko:K02932</td>
+<td align="right">-0.1390742</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9453_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">132</td>
+<td align="left">ko:K02932</td>
+<td align="right">-0.1390742</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8136_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">133</td>
+<td align="left">ko:K02936</td>
+<td align="right">-0.4338248</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8757_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">134</td>
+<td align="left">ko:K02937</td>
+<td align="right">1.0124999</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7549_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">135</td>
+<td align="left">ko:K02938</td>
+<td align="right">-0.4867942</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN2396_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">136</td>
+<td align="left">ko:K02941</td>
+<td align="right">-0.3912171</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8198_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">137</td>
+<td align="left">ko:K02947</td>
+<td align="right">-0.3389421</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5313_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">138</td>
+<td align="left">ko:K02949</td>
+<td align="right">0.3608416</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8718_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">139</td>
+<td align="left">ko:K02951</td>
+<td align="right">0.6131069</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7101_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">140</td>
+<td align="left">ko:K02953</td>
+<td align="right">0.6322457</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN14986_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">141</td>
+<td align="left">ko:K02953</td>
+<td align="right">0.6322457</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8391_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">142</td>
+<td align="left">ko:K02955</td>
+<td align="right">0.1122661</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9071_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">143</td>
+<td align="left">ko:K02955</td>
+<td align="right">0.1122661</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9071_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">144</td>
+<td align="left">ko:K02958</td>
+<td align="right">0.2236298</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8934_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">145</td>
+<td align="left">ko:K02962</td>
+<td align="right">-0.4245159</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9098_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">146</td>
+<td align="left">ko:K02966</td>
+<td align="right">0.4140137</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8258_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">147</td>
+<td align="left">ko:K02969</td>
+<td align="right">-1.0051792</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN824_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">148</td>
+<td align="left">ko:K02973</td>
+<td align="right">0.9678034</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7764_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">149</td>
+<td align="left">ko:K02975</td>
+<td align="right">-0.7482159</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7459_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">150</td>
+<td align="left">ko:K02976</td>
+<td align="right">-1.4956673</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8677_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">151</td>
+<td align="left">ko:K02978</td>
+<td align="right">-0.5971625</td>
+<td align="right">0.6572259</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8097_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">152</td>
+<td align="left">ko:K02980</td>
+<td align="right">-1.1639739</td>
+<td align="right">0.4843917</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8210_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">153</td>
+<td align="left">ko:K02980</td>
+<td align="right">-1.1639739</td>
+<td align="right">0.4843917</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8210_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">154</td>
+<td align="left">ko:K02983</td>
+<td align="right">0.5134663</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8698_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">155</td>
+<td align="left">ko:K02984</td>
+<td align="right">0.8372853</td>
+<td align="right">0.7004479</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9087_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">156</td>
+<td align="left">ko:K02985</td>
+<td align="right">-0.3047676</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8753_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">157</td>
+<td align="left">ko:K02987</td>
+<td align="right">1.2490842</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9220_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">158</td>
+<td align="left">ko:K02991</td>
+<td align="right">-0.1035354</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8801_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">159</td>
+<td align="left">ko:K02992</td>
+<td align="right">-0.2633083</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7340_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">160</td>
+<td align="left">ko:K02993</td>
+<td align="right">-0.7753637</td>
+<td align="right">0.2531007</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8486_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">161</td>
+<td align="left">ko:K02995</td>
+<td align="right">-0.0212613</td>
+<td align="right">0.9935749</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8406_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">162</td>
+<td align="left">ko:K03007</td>
+<td align="right">-0.3571590</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6976_c0_g2_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">163</td>
+<td align="left">ko:K03007</td>
+<td align="right">-0.3571590</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6976_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">164</td>
+<td align="left">ko:K03008</td>
+<td align="right">0.7489747</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN2486_c1_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">165</td>
+<td align="left">ko:K03031</td>
+<td align="right">0.2064539</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7344_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">166</td>
+<td align="left">ko:K03083</td>
+<td align="right">0.0510544</td>
+<td align="right">0.9527797</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8336_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">167</td>
+<td align="left">ko:K03113</td>
+<td align="right">-0.3123835</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8110_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">168</td>
+<td align="left">ko:K03231</td>
+<td align="right">0.6266482</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9609_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">169</td>
+<td align="left">ko:K03232</td>
+<td align="right">-1.9624607</td>
+<td align="right">0.4258956</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8282_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">170</td>
+<td align="left">ko:K03233</td>
+<td align="right">-0.2993520</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9269_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">171</td>
+<td align="left">ko:K03234</td>
+<td align="right">0.8681843</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9164_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">172</td>
+<td align="left">ko:K03236</td>
+<td align="right">-0.7911187</td>
+<td align="right">0.4862690</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9142_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">173</td>
+<td align="left">ko:K03246</td>
+<td align="right">0.3374606</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7723_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">174</td>
+<td align="left">ko:K03246</td>
+<td align="right">0.3374606</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7723_c0_g2_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">175</td>
+<td align="left">ko:K03247</td>
+<td align="right">-0.3114965</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8464_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">176</td>
+<td align="left">ko:K03283</td>
+<td align="right">-0.3434734</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9405_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">177</td>
+<td align="left">ko:K03283</td>
+<td align="right">-0.3434734</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9405_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">178</td>
+<td align="left">ko:K03521</td>
+<td align="right">0.1962539</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7401_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">179</td>
+<td align="left">ko:K03522</td>
+<td align="right">-0.7696239</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7111_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">180</td>
+<td align="left">ko:K03626</td>
+<td align="right">-0.0984515</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8390_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">181</td>
+<td align="left">ko:K03661</td>
+<td align="right">-1.4902674</td>
+<td align="right">0.9081818</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9092_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">182</td>
+<td align="left">ko:K03872</td>
+<td align="right">0.3854138</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN1698_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">183</td>
+<td align="left">ko:K03872</td>
+<td align="right">0.3854138</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN1698_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">184</td>
+<td align="left">ko:K03872</td>
+<td align="right">0.3854138</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN1698_c0_g3_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">185</td>
+<td align="left">ko:K03873</td>
+<td align="right">0.0021005</td>
+<td align="right">0.9984162</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8603_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">186</td>
+<td align="left">ko:K03873</td>
+<td align="right">0.0021005</td>
+<td align="right">0.9984162</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8603_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">187</td>
+<td align="left">ko:K03936</td>
+<td align="right">0.2937709</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN15399_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">188</td>
+<td align="left">ko:K03942</td>
+<td align="right">-0.0141150</td>
+<td align="right">0.9984162</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6550_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">189</td>
+<td align="left">ko:K03943</td>
+<td align="right">0.8078414</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6530_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">190</td>
+<td align="left">ko:K04043</td>
+<td align="right">0.6556801</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8020_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">191</td>
+<td align="left">ko:K04079</td>
+<td align="right">-0.2273315</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9547_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">192</td>
+<td align="left">ko:K04345</td>
+<td align="right">0.9462425</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6983_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">193</td>
+<td align="left">ko:K04348</td>
+<td align="right">1.4884328</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6449_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">194</td>
+<td align="left">ko:K04354</td>
+<td align="right">-2.0688102</td>
+<td align="right">0.0273379</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8821_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">195</td>
+<td align="left">ko:K04364</td>
+<td align="right">-0.2641061</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8360_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">196</td>
+<td align="left">ko:K04364</td>
+<td align="right">-0.2641061</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN512_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">197</td>
+<td align="left">ko:K04369</td>
+<td align="right">-0.9821908</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7370_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">198</td>
+<td align="left">ko:K04370</td>
+<td align="right">0.2036661</td>
+<td align="right">0.9454341</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7498_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">199</td>
+<td align="left">ko:K04371</td>
+<td align="right">-0.3873544</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN19170_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">200</td>
+<td align="left">ko:K04393</td>
+<td align="right">-0.6366292</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8545_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">201</td>
+<td align="left">ko:K04393</td>
+<td align="right">-0.6366292</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8633_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">202</td>
+<td align="left">ko:K04393</td>
+<td align="right">-0.6366292</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8633_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">203</td>
+<td align="left">ko:K04393</td>
+<td align="right">-0.6366292</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9378_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">204</td>
+<td align="left">ko:K04444</td>
+<td align="right">-1.1340042</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8549_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">205</td>
+<td align="left">ko:K04456</td>
+<td align="right">-0.7003847</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9287_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">206</td>
+<td align="left">ko:K04456</td>
+<td align="right">-0.7003847</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9287_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">207</td>
+<td align="left">ko:K04503</td>
+<td align="right">-0.1832307</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7471_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">208</td>
+<td align="left">ko:K04536</td>
+<td align="right">-0.6376279</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9504_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">209</td>
+<td align="left">ko:K04552</td>
+<td align="right">0.1694939</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8278_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">210</td>
+<td align="left">ko:K04567</td>
+<td align="right">0.0506984</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9247_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">211</td>
+<td align="left">ko:K04712</td>
+<td align="right">0.2128804</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9249_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">212</td>
+<td align="left">ko:K05754</td>
+<td align="right">-0.1282358</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9414_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">213</td>
+<td align="left">ko:K05754</td>
+<td align="right">-0.1282358</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9414_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">214</td>
+<td align="left">ko:K05755</td>
+<td align="right">0.7135244</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8355_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">215</td>
+<td align="left">ko:K05757</td>
+<td align="right">0.0570478</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9506_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">216</td>
+<td align="left">ko:K05758</td>
+<td align="right">-0.7287398</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7982_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">217</td>
+<td align="left">ko:K05758</td>
+<td align="right">-0.7287398</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7982_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">218</td>
+<td align="left">ko:K05759</td>
+<td align="right">-0.7620942</td>
+<td align="right">0.4843917</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9344_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">219</td>
+<td align="left">ko:K05759</td>
+<td align="right">-0.7620942</td>
+<td align="right">0.4843917</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9344_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">220</td>
+<td align="left">ko:K05759</td>
+<td align="right">-0.7620942</td>
+<td align="right">0.4843917</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9344_c0_g1_i3</td>
+</tr>
+<tr class="odd">
+<td align="right">221</td>
+<td align="left">ko:K06685</td>
+<td align="right">0.3478818</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5049_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">222</td>
+<td align="left">ko:K06685</td>
+<td align="right">0.3478818</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5049_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">223</td>
+<td align="left">ko:K06689</td>
+<td align="right">-0.1629502</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8852_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">224</td>
+<td align="left">ko:K06689</td>
+<td align="right">-0.1629502</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6341_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">225</td>
+<td align="left">ko:K06689</td>
+<td align="right">-0.1629502</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN17839_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">226</td>
+<td align="left">ko:K06689</td>
+<td align="right">-0.1629502</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN14990_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">227</td>
+<td align="left">ko:K06689</td>
+<td align="right">-0.1629502</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8852_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">228</td>
+<td align="left">ko:K06689</td>
+<td align="right">-0.1629502</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN1045_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">229</td>
+<td align="left">ko:K06704</td>
+<td align="right">0.5518728</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7265_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">230</td>
+<td align="left">ko:K07151</td>
+<td align="right">-0.2061498</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8533_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">231</td>
+<td align="left">ko:K07151</td>
+<td align="right">-0.2061498</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8533_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">232</td>
+<td align="left">ko:K07192</td>
+<td align="right">-0.1945866</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9397_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">233</td>
+<td align="left">ko:K07192</td>
+<td align="right">-0.1945866</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9397_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">234</td>
+<td align="left">ko:K07205</td>
+<td align="right">-0.8858546</td>
+<td align="right">0.6802160</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9461_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">235</td>
+<td align="left">ko:K07342</td>
+<td align="right">-0.2546809</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8827_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">236</td>
+<td align="left">ko:K07375</td>
+<td align="right">0.1354897</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8706_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">237</td>
+<td align="left">ko:K07375</td>
+<td align="right">0.1354897</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN1082_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">238</td>
+<td align="left">ko:K07509</td>
+<td align="right">-0.0809626</td>
+<td align="right">0.9486562</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9741_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">239</td>
+<td align="left">ko:K07827</td>
+<td align="right">0.4190100</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9923_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">240</td>
+<td align="left">ko:K07827</td>
+<td align="right">0.4190100</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN1721_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">241</td>
+<td align="left">ko:K07827</td>
+<td align="right">0.4190100</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8440_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">242</td>
+<td align="left">ko:K07874</td>
+<td align="right">0.3955606</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8731_c0_g2_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">243</td>
+<td align="left">ko:K07874</td>
+<td align="right">0.3955606</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8231_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">244</td>
+<td align="left">ko:K07874</td>
+<td align="right">0.3955606</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8530_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">245</td>
+<td align="left">ko:K07874</td>
+<td align="right">0.3955606</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8231_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">246</td>
+<td align="left">ko:K07874</td>
+<td align="right">0.3955606</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9575_c3_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">247</td>
+<td align="left">ko:K07887</td>
+<td align="right">0.0789915</td>
+<td align="right">0.9486562</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8941_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">248</td>
+<td align="left">ko:K07890</td>
+<td align="right">1.2352326</td>
+<td align="right">0.1472124</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9053_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">249</td>
+<td align="left">ko:K07893</td>
+<td align="right">-0.3994304</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7542_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">250</td>
+<td align="left">ko:K07901</td>
+<td align="right">-0.5288522</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8731_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">251</td>
+<td align="left">ko:K07901</td>
+<td align="right">-0.5288522</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8231_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">252</td>
+<td align="left">ko:K07901</td>
+<td align="right">-0.5288522</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8530_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">253</td>
+<td align="left">ko:K07901</td>
+<td align="right">-0.5288522</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8231_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">254</td>
+<td align="left">ko:K07936</td>
+<td align="right">0.3061934</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8695_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">255</td>
+<td align="left">ko:K07937</td>
+<td align="right">0.0264686</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9138_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">256</td>
+<td align="left">ko:K07937</td>
+<td align="right">0.0264686</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8940_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">257</td>
+<td align="left">ko:K07937</td>
+<td align="right">0.0264686</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8940_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">258</td>
+<td align="left">ko:K07937</td>
+<td align="right">0.0264686</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8426_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">259</td>
+<td align="left">ko:K07937</td>
+<td align="right">0.0264686</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6858_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">260</td>
+<td align="left">ko:K07937</td>
+<td align="right">0.0264686</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN14400_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">261</td>
+<td align="left">ko:K07937</td>
+<td align="right">0.0264686</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6858_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">262</td>
+<td align="left">ko:K07937</td>
+<td align="right">0.0264686</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN14631_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">263</td>
+<td align="left">ko:K07976</td>
+<td align="right">0.5434280</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7542_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">264</td>
+<td align="left">ko:K07976</td>
+<td align="right">0.5434280</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8231_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">265</td>
+<td align="left">ko:K07976</td>
+<td align="right">0.5434280</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6274_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">266</td>
+<td align="left">ko:K07976</td>
+<td align="right">0.5434280</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6274_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">267</td>
+<td align="left">ko:K07976</td>
+<td align="right">0.5434280</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9575_c3_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">268</td>
+<td align="left">ko:K07976</td>
+<td align="right">0.5434280</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9451_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">269</td>
+<td align="left">ko:K07976</td>
+<td align="right">0.5434280</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8016_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">270</td>
+<td align="left">ko:K07976</td>
+<td align="right">0.5434280</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8231_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">271</td>
+<td align="left">ko:K08056</td>
+<td align="right">-0.0864526</td>
+<td align="right">0.9874144</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9094_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">272</td>
+<td align="left">ko:K08548</td>
+<td align="right">0.1369651</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9116_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">273</td>
+<td align="left">ko:K08548</td>
+<td align="right">0.1369651</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9116_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">274</td>
+<td align="left">ko:K08764</td>
+<td align="right">1.1791114</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9167_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">275</td>
+<td align="left">ko:K08870</td>
+<td align="right">-0.5472641</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8164_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">276</td>
+<td align="left">ko:K08957</td>
+<td align="right">0.9246752</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9360_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">277</td>
+<td align="left">ko:K08957</td>
+<td align="right">0.9246752</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9360_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">278</td>
+<td align="left">ko:K08957</td>
+<td align="right">0.9246752</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7897_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">279</td>
+<td align="left">ko:K09022</td>
+<td align="right">-0.4674347</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9733_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">280</td>
+<td align="left">ko:K09398</td>
+<td align="right">0.9573118</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7380_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">281</td>
+<td align="left">ko:K09398</td>
+<td align="right">0.9573118</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5202_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">282</td>
+<td align="left">ko:K09481</td>
+<td align="right">0.1169691</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8713_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">283</td>
+<td align="left">ko:K09490</td>
+<td align="right">1.3220720</td>
+<td align="right">0.7036797</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9619_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">284</td>
+<td align="left">ko:K09490</td>
+<td align="right">1.3220720</td>
+<td align="right">0.7036797</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9405_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">285</td>
+<td align="left">ko:K09490</td>
+<td align="right">1.3220720</td>
+<td align="right">0.7036797</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9405_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">286</td>
+<td align="left">ko:K09567</td>
+<td align="right">-1.2817000</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9399_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">287</td>
+<td align="left">ko:K09567</td>
+<td align="right">-1.2817000</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9266_c1_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">288</td>
+<td align="left">ko:K09568</td>
+<td align="right">0.7322070</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN3357_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">289</td>
+<td align="left">ko:K09568</td>
+<td align="right">0.7322070</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6990_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">290</td>
+<td align="left">ko:K09569</td>
+<td align="right">1.6085671</td>
+<td align="right">0.3588439</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8050_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">291</td>
+<td align="left">ko:K09569</td>
+<td align="right">1.6085671</td>
+<td align="right">0.3588439</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6990_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">292</td>
+<td align="left">ko:K09580</td>
+<td align="right">0.0605568</td>
+<td align="right">0.9486562</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8528_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">293</td>
+<td align="left">ko:K09584</td>
+<td align="right">0.2001740</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8974_c0_g1_i3</td>
+</tr>
+<tr class="even">
+<td align="right">294</td>
+<td align="left">ko:K09584</td>
+<td align="right">0.2001740</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8974_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">295</td>
+<td align="left">ko:K09584</td>
+<td align="right">0.2001740</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8974_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">296</td>
+<td align="left">ko:K09595</td>
+<td align="right">-0.8247058</td>
+<td align="right">0.4843917</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9068_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">297</td>
+<td align="left">ko:K10364</td>
+<td align="right">0.5533104</td>
+<td align="right">0.7146870</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9295_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">298</td>
+<td align="left">ko:K10365</td>
+<td align="right">-0.1549023</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9613_c0_g1_i3</td>
+</tr>
+<tr class="odd">
+<td align="right">299</td>
+<td align="left">ko:K10418</td>
+<td align="right">0.3848633</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8070_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">300</td>
+<td align="left">ko:K10418</td>
+<td align="right">0.3848633</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8070_c0_g1_i4</td>
+</tr>
+<tr class="odd">
+<td align="right">301</td>
+<td align="left">ko:K10418</td>
+<td align="right">0.3848633</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8070_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">302</td>
+<td align="left">ko:K10418</td>
+<td align="right">0.3848633</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8070_c0_g1_i3</td>
+</tr>
+<tr class="odd">
+<td align="right">303</td>
+<td align="left">ko:K10419</td>
+<td align="right">0.2730668</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5319_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">304</td>
+<td align="left">ko:K10419</td>
+<td align="right">0.2730668</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5319_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">305</td>
+<td align="left">ko:K10420</td>
+<td align="right">0.0137045</td>
+<td align="right">0.9958866</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8606_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">306</td>
+<td align="left">ko:K10435</td>
+<td align="right">0.0746330</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8446_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">307</td>
+<td align="left">ko:K10435</td>
+<td align="right">0.0746330</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8446_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">308</td>
+<td align="left">ko:K10435</td>
+<td align="right">0.0746330</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8901_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">309</td>
+<td align="left">ko:K10573</td>
+<td align="right">0.9035646</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8301_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">310</td>
+<td align="left">ko:K10575</td>
+<td align="right">-0.4237239</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN3336_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">311</td>
+<td align="left">ko:K10575</td>
+<td align="right">-0.4237239</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN3336_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">312</td>
+<td align="left">ko:K10575</td>
+<td align="right">-0.4237239</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6793_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">313</td>
+<td align="left">ko:K10577</td>
+<td align="right">-0.8399897</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN1426_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">314</td>
+<td align="left">ko:K10580</td>
+<td align="right">0.0333699</td>
+<td align="right">0.9837153</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8852_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">315</td>
+<td align="left">ko:K10580</td>
+<td align="right">0.0333699</td>
+<td align="right">0.9837153</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN1045_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">316</td>
+<td align="left">ko:K10580</td>
+<td align="right">0.0333699</td>
+<td align="right">0.9837153</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8852_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">317</td>
+<td align="left">ko:K10582</td>
+<td align="right">0.3243240</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN3143_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">318</td>
+<td align="left">ko:K10583</td>
+<td align="right">-0.9952205</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN3986_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">319</td>
+<td align="left">ko:K10583</td>
+<td align="right">-0.9952205</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN3986_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">320</td>
+<td align="left">ko:K10688</td>
+<td align="right">-1.3588588</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN2321_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">321</td>
+<td align="left">ko:K10704</td>
+<td align="right">0.1536479</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7173_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">322</td>
+<td align="left">ko:K10704</td>
+<td align="right">0.1536479</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7173_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">323</td>
+<td align="left">ko:K10949</td>
+<td align="right">0.0579330</td>
+<td align="right">0.9768929</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9335_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">324</td>
+<td align="left">ko:K10956</td>
+<td align="right">0.8737986</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9419_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">325</td>
+<td align="left">ko:K11087</td>
+<td align="right">-0.3580969</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7547_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">326</td>
+<td align="left">ko:K11088</td>
+<td align="right">0.0096252</td>
+<td align="right">0.9984162</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7251_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">327</td>
+<td align="left">ko:K11088</td>
+<td align="right">0.0096252</td>
+<td align="right">0.9984162</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7251_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">328</td>
+<td align="left">ko:K11099</td>
+<td align="right">0.6853751</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6405_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">329</td>
+<td align="left">ko:K11130</td>
+<td align="right">0.9098313</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN1716_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">330</td>
+<td align="left">ko:K11188</td>
+<td align="right">-0.2687130</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9458_c1_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">331</td>
+<td align="left">ko:K11251</td>
+<td align="right">1.0681655</td>
+<td align="right">0.4843917</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8592_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">332</td>
+<td align="left">ko:K11251</td>
+<td align="right">1.0681655</td>
+<td align="right">0.4843917</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN25720_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">333</td>
+<td align="left">ko:K11251</td>
+<td align="right">1.0681655</td>
+<td align="right">0.4843917</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8250_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">334</td>
+<td align="left">ko:K11251</td>
+<td align="right">1.0681655</td>
+<td align="right">0.4843917</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7867_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">335</td>
+<td align="left">ko:K11252</td>
+<td align="right">-0.0827634</td>
+<td align="right">0.9454341</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9165_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">336</td>
+<td align="left">ko:K11252</td>
+<td align="right">-0.0827634</td>
+<td align="right">0.9454341</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN13091_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">337</td>
+<td align="left">ko:K11252</td>
+<td align="right">-0.0827634</td>
+<td align="right">0.9454341</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9165_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">338</td>
+<td align="left">ko:K11252</td>
+<td align="right">-0.0827634</td>
+<td align="right">0.9454341</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN15080_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">339</td>
+<td align="left">ko:K11254</td>
+<td align="right">0.0309449</td>
+<td align="right">0.9935749</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN579_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">340</td>
+<td align="left">ko:K11495</td>
+<td align="right">-0.7659792</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN28548_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">341</td>
+<td align="left">ko:K11495</td>
+<td align="right">-0.7659792</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6396_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">342</td>
+<td align="left">ko:K11584</td>
+<td align="right">0.3037877</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7235_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">343</td>
+<td align="left">ko:K11884</td>
+<td align="right">-0.2225430</td>
+<td align="right">0.9454341</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN19644_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">344</td>
+<td align="left">ko:K11980</td>
+<td align="right">-0.5901204</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8076_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">345</td>
+<td align="left">ko:K12158</td>
+<td align="right">-0.0902447</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8268_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">346</td>
+<td align="left">ko:K12158</td>
+<td align="right">-0.0902447</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN2123_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">347</td>
+<td align="left">ko:K12158</td>
+<td align="right">-0.0902447</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN17244_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">348</td>
+<td align="left">ko:K12158</td>
+<td align="right">-0.0902447</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8993_c1_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">349</td>
+<td align="left">ko:K12158</td>
+<td align="right">-0.0902447</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8993_c1_g1_i10</td>
+</tr>
+<tr class="even">
+<td align="right">350</td>
+<td align="left">ko:K12158</td>
+<td align="right">-0.0902447</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8993_c1_g1_i11</td>
+</tr>
+<tr class="odd">
+<td align="right">351</td>
+<td align="left">ko:K12158</td>
+<td align="right">-0.0902447</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8993_c1_g1_i4</td>
+</tr>
+<tr class="even">
+<td align="right">352</td>
+<td align="left">ko:K12158</td>
+<td align="right">-0.0902447</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN2123_c0_g2_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">353</td>
+<td align="left">ko:K12158</td>
+<td align="right">-0.0902447</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN16207_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">354</td>
+<td align="left">ko:K12158</td>
+<td align="right">-0.0902447</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN937_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">355</td>
+<td align="left">ko:K12158</td>
+<td align="right">-0.0902447</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8993_c1_g1_i5</td>
+</tr>
+<tr class="even">
+<td align="right">356</td>
+<td align="left">ko:K12194</td>
+<td align="right">-0.1256151</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8618_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">357</td>
+<td align="left">ko:K12197</td>
+<td align="right">-0.0750719</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8810_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">358</td>
+<td align="left">ko:K12197</td>
+<td align="right">-0.0750719</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7851_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">359</td>
+<td align="left">ko:K12198</td>
+<td align="right">-1.4991505</td>
+<td align="right">0.7036797</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7922_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">360</td>
+<td align="left">ko:K12393</td>
+<td align="right">0.5381170</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8936_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">361</td>
+<td align="left">ko:K12621</td>
+<td align="right">0.5403736</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN1109_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">362</td>
+<td align="left">ko:K12622</td>
+<td align="right">-0.7343826</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN24479_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">363</td>
+<td align="left">ko:K12623</td>
+<td align="right">0.1475660</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN20720_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">364</td>
+<td align="left">ko:K12757</td>
+<td align="right">-0.0902643</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9024_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">365</td>
+<td align="left">ko:K12757</td>
+<td align="right">-0.0902643</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9114_c0_g1_i3</td>
+</tr>
+<tr class="even">
+<td align="right">366</td>
+<td align="left">ko:K12757</td>
+<td align="right">-0.0902643</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9114_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">367</td>
+<td align="left">ko:K12757</td>
+<td align="right">-0.0902643</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6480_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">368</td>
+<td align="left">ko:K12757</td>
+<td align="right">-0.0902643</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9114_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">369</td>
+<td align="left">ko:K12828</td>
+<td align="right">-0.0392049</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8874_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">370</td>
+<td align="left">ko:K12832</td>
+<td align="right">-0.1266079</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8051_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">371</td>
+<td align="left">ko:K12833</td>
+<td align="right">-1.0505345</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5945_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">372</td>
+<td align="left">ko:K12833</td>
+<td align="right">-1.0505345</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5945_c0_g3_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">373</td>
+<td align="left">ko:K12833</td>
+<td align="right">-1.0505345</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5945_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">374</td>
+<td align="left">ko:K12859</td>
+<td align="right">-0.0610732</td>
+<td align="right">0.9768929</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN15336_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">375</td>
+<td align="left">ko:K12859</td>
+<td align="right">-0.0610732</td>
+<td align="right">0.9768929</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN4609_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">376</td>
+<td align="left">ko:K12859</td>
+<td align="right">-0.0610732</td>
+<td align="right">0.9768929</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN4609_c0_g2_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">377</td>
+<td align="left">ko:K12877</td>
+<td align="right">-0.3701299</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8980_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">378</td>
+<td align="left">ko:K12877</td>
+<td align="right">-0.3701299</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8980_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">379</td>
+<td align="left">ko:K12947</td>
+<td align="right">-0.6542323</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5762_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">380</td>
+<td align="left">ko:K12947</td>
+<td align="right">-0.6542323</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5762_c0_g2_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">381</td>
+<td align="left">ko:K13025</td>
+<td align="right">-0.1539089</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9429_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">382</td>
+<td align="left">ko:K13025</td>
+<td align="right">-0.1539089</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7983_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">383</td>
+<td align="left">ko:K13126</td>
+<td align="right">0.2714124</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9515_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">384</td>
+<td align="left">ko:K13176</td>
+<td align="right">-0.7712348</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN4236_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">385</td>
+<td align="left">ko:K13176</td>
+<td align="right">-0.7712348</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN4236_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">386</td>
+<td align="left">ko:K13251</td>
+<td align="right">0.1656981</td>
+<td align="right">0.9507932</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7508_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">387</td>
+<td align="left">ko:K13758</td>
+<td align="right">0.8021459</td>
+<td align="right">0.9081818</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8759_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">388</td>
+<td align="left">ko:K13785</td>
+<td align="right">-2.6734017</td>
+<td align="right">0.0000154</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8846_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">389</td>
+<td align="left">ko:K13785</td>
+<td align="right">-2.6734017</td>
+<td align="right">0.0000154</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6662_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">390</td>
+<td align="left">ko:K14397</td>
+<td align="right">-0.2329295</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7154_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">391</td>
+<td align="left">ko:K14753</td>
+<td align="right">-0.1339375</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9544_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">392</td>
+<td align="left">ko:K14803</td>
+<td align="right">-0.7496263</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN24681_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">393</td>
+<td align="left">ko:K14965</td>
+<td align="right">-6.1770697</td>
+<td align="right">0.0000000</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8173_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">394</td>
+<td align="left">ko:K15025</td>
+<td align="right">0.0523984</td>
+<td align="right">0.9874144</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6997_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">395</td>
+<td align="left">ko:K15103</td>
+<td align="right">0.2044230</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8597_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">396</td>
+<td align="left">ko:K15103</td>
+<td align="right">0.2044230</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8597_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">397</td>
+<td align="left">ko:K15620</td>
+<td align="right">-1.1227399</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6629_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">398</td>
+<td align="left">ko:K15620</td>
+<td align="right">-1.1227399</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6629_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">399</td>
+<td align="left">ko:K16186</td>
+<td align="right">1.6275294</td>
+<td align="right">0.1461951</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8431_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">400</td>
+<td align="left">ko:K16186</td>
+<td align="right">1.6275294</td>
+<td align="right">0.1461951</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8431_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">401</td>
+<td align="left">ko:K16197</td>
+<td align="right">-1.3002342</td>
+<td align="right">0.1939736</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9134_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">402</td>
+<td align="left">ko:K16197</td>
+<td align="right">-1.3002342</td>
+<td align="right">0.1939736</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9134_c0_g2_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">403</td>
+<td align="left">ko:K16197</td>
+<td align="right">-1.3002342</td>
+<td align="right">0.1939736</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9134_c0_g1_i3</td>
+</tr>
+<tr class="even">
+<td align="right">404</td>
+<td align="left">ko:K16197</td>
+<td align="right">-1.3002342</td>
+<td align="right">0.1939736</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9093_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">405</td>
+<td align="left">ko:K16197</td>
+<td align="right">-1.3002342</td>
+<td align="right">0.1939736</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9134_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">406</td>
+<td align="left">ko:K16197</td>
+<td align="right">-1.3002342</td>
+<td align="right">0.1939736</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8511_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">407</td>
+<td align="left">ko:K16197</td>
+<td align="right">-1.3002342</td>
+<td align="right">0.1939736</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7767_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">408</td>
+<td align="left">ko:K16344</td>
+<td align="right">-1.2540429</td>
+<td align="right">0.5261107</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8217_c0_g2_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">409</td>
+<td align="left">ko:K16344</td>
+<td align="right">-1.2540429</td>
+<td align="right">0.5261107</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8217_c0_g2_i1</td>
+</tr>
+<tr class="even">
+<td align="right">410</td>
+<td align="left">ko:K16575</td>
+<td align="right">-0.0089101</td>
+<td align="right">0.9984162</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN2882_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">411</td>
+<td align="left">ko:K16794</td>
+<td align="right">-0.2197199</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7213_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">412</td>
+<td align="left">ko:K17080</td>
+<td align="right">-0.2983804</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8700_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">413</td>
+<td align="left">ko:K17080</td>
+<td align="right">-0.2983804</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9301_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">414</td>
+<td align="left">ko:K17080</td>
+<td align="right">-0.2983804</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8700_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">415</td>
+<td align="left">ko:K17081</td>
+<td align="right">-0.4303695</td>
+<td align="right">0.9081818</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9301_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">416</td>
+<td align="left">ko:K17081</td>
+<td align="right">-0.4303695</td>
+<td align="right">0.9081818</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9301_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">417</td>
+<td align="left">ko:K17093</td>
+<td align="right">0.9816636</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6166_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">418</td>
+<td align="left">ko:K17254</td>
+<td align="right">0.8477081</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9424_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">419</td>
+<td align="left">ko:K17266</td>
+<td align="right">-0.9831049</td>
+<td align="right">0.4843917</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7886_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">420</td>
+<td align="left">ko:K17268</td>
+<td align="right">0.3383957</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8629_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">421</td>
+<td align="left">ko:K17497</td>
+<td align="right">-0.3642903</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5679_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">422</td>
+<td align="left">ko:K17780</td>
+<td align="right">-0.7758257</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7414_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">423</td>
+<td align="left">ko:K17795</td>
+<td align="right">0.8312804</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7538_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">424</td>
+<td align="left">ko:K17918</td>
+<td align="right">-0.0916642</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7979_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">425</td>
+<td align="left">ko:K17920</td>
+<td align="right">1.1187755</td>
+<td align="right">0.0000011</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9347_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">426</td>
+<td align="left">ko:K18269</td>
+<td align="right">-0.4837879</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8262_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">427</td>
+<td align="left">ko:K18466</td>
+<td align="right">-0.3494059</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9051_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">428</td>
+<td align="left">ko:K18617</td>
+<td align="right">0.5792510</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9299_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">429</td>
+<td align="left">ko:K19682</td>
+<td align="right">0.4212604</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8255_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">430</td>
+<td align="left">ko:K19682</td>
+<td align="right">0.4212604</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8255_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">431</td>
+<td align="left">ko:K19765</td>
+<td align="right">0.0488015</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7870_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">432</td>
+<td align="left">ko:K19788</td>
+<td align="right">1.8179985</td>
+<td align="right">0.8580913</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6152_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">433</td>
+<td align="left">ko:K19931</td>
+<td align="right">-0.0454615</td>
+<td align="right">0.9583297</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9182_c0_g1_i2</td>
+</tr>
+<tr class="even">
+<td align="right">434</td>
+<td align="left">ko:K19931</td>
+<td align="right">-0.0454615</td>
+<td align="right">0.9583297</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9182_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">435</td>
+<td align="left">ko:K19932</td>
+<td align="right">-1.0103270</td>
+<td align="right">0.8073518</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN5413_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">436</td>
+<td align="left">ko:K20011</td>
+<td align="right">-0.1257777</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9049_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">437</td>
+<td align="left">ko:K20301</td>
+<td align="right">0.5520926</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7128_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">438</td>
+<td align="left">ko:K20302</td>
+<td align="right">0.0521552</td>
+<td align="right">0.9708357</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7458_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">439</td>
+<td align="left">ko:K20346</td>
+<td align="right">-1.1157158</td>
+<td align="right">0.8219966</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7461_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">440</td>
+<td align="left">ko:K20346</td>
+<td align="right">-1.1157158</td>
+<td align="right">0.8219966</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7461_c0_g2_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">441</td>
+<td align="left">ko:K20347</td>
+<td align="right">-0.6630994</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8500_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">442</td>
+<td align="left">ko:K20350</td>
+<td align="right">-1.5723080</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN11126_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">443</td>
+<td align="left">ko:K20352</td>
+<td align="right">0.0868703</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9157_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">444</td>
+<td align="left">ko:K20352</td>
+<td align="right">0.0868703</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9157_c0_g1_i2</td>
+</tr>
+<tr class="odd">
+<td align="right">445</td>
+<td align="left">ko:K20369</td>
+<td align="right">0.6054572</td>
+<td align="right">0.0163413</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9530_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">446</td>
+<td align="left">ko:K20398</td>
+<td align="right">0.4499139</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8585_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">447</td>
+<td align="left">ko:K20399</td>
+<td align="right">-1.4687616</td>
+<td align="right">0.9211363</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6229_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">448</td>
+<td align="left">ko:K20472</td>
+<td align="right">0.3960334</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8790_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">449</td>
+<td align="left">ko:K21870</td>
+<td align="right">-0.5093722</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN7090_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">450</td>
+<td align="left">ko:K21891</td>
+<td align="right">-0.8956141</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN1694_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">451</td>
+<td align="left">ko:K22069</td>
+<td align="right">0.5760737</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN25525_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">452</td>
+<td align="left">ko:K22390</td>
+<td align="right">-0.4111917</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9166_c0_g1_i3</td>
+</tr>
+<tr class="odd">
+<td align="right">453</td>
+<td align="left">ko:K22390</td>
+<td align="right">-0.4111917</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9166_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">454</td>
+<td align="left">ko:K22503</td>
+<td align="right">-0.3522391</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9576_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">455</td>
+<td align="left">ko:K22556</td>
+<td align="right">-2.5198978</td>
+<td align="right">0.4843917</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN9027_c0_g1_i1</td>
+</tr>
+<tr class="even">
+<td align="right">456</td>
+<td align="left">ko:K22939</td>
+<td align="right">-0.4397173</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN6163_c0_g1_i1</td>
+</tr>
+<tr class="odd">
+<td align="right">457</td>
+<td align="left">ko:K23034</td>
+<td align="right">-2.0260199</td>
+<td align="right">0.9452229</td>
+<td align="left">Menthol_Menthol_vs_Control</td>
+<td align="left">TRINITY_DN8840_c0_g1_i1</td>
+</tr>
+</tbody>
+</table>
 <div id="refs" class="references">
 <div id="ref-Albert">
 <p>Caballero-Solares, Albert, Xi Xue, Christopher C. Parrish, Maryam Beheshti Foroutani, Richard G. Taylor, and Matthew L. Rise. 2018. “Changes in the Liver Transcriptome of Farmed Atlantic Salmon (Salmo Salar) Fed Experimental Diets Based on Terrestrial Alternatives to Fish Meal and Fish Oil.” <em>BMC Genomics</em> 19 (1): 796–96. <a href="https://doi.org/10.1186/s12864-018-5188-6">https://doi.org/10.1186/s12864-018-5188-6</a>.</p>

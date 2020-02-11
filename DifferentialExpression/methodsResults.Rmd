@@ -19,7 +19,7 @@ bibliography: bibliography.ris
   Then use DESeq2[@Albert] to test the results.
 
 
-```{r, layout="l-body-outset",include=FALSE}
+```{r, layout="l-body-outset"}
 library(knitr)
 deannotated <- read.csv("deAnnotated.csv", header = TRUE)
 kable(deannotated)
