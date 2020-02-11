@@ -1,0 +1,50 @@
+TY  - JOUR
+DB  - PubMed
+AU  - Caballero-Solares, Albert
+AU  - Xue, Xi
+AU  - Parrish, Christopher C
+AU  - Foroutani, Maryam Beheshti
+AU  - Taylor, Richard G
+AU  - Rise, Matthew L
+T1  - Changes in the liver transcriptome of farmed Atlantic salmon (Salmo salar) fed experimental diets based on terrestrial alternatives to fish meal and fish oil
+LA  - eng
+SN  - 1471-2164
+Y1  - 2018/11/03
+AB  - BACKGROUND: Dependence on marine natural resources threatens the sustainability of Atlantic salmon aquaculture. In the present study, Atlantic salmon fed for 14 weeks with an experimental diet based on animal by-products and vegetable oil (ABP) exhibited reduced growth performance compared with others fed a fish meal/fish oil based experimental diet (MAR) and a plant protein/vegetable oil-based experimental diet (VEG). To characterize the molecular changes underlying the differences in growth performance, we conducted a 44 K microarray study of the liver transcriptome of the three dietary groups. RESULTS: The microarray experiment identified 122 differentially expressed features (Rank Products, PFP < 10%). Based on their associated Gene Ontology terms, 46 probes were classified as metabolic and growth-relevant genes, 25 as immune-related, and 12 as related to oxidation-reduction processes. The microarray results were validated by qPCR analysis of 29 microarray-identified transcripts. Diets significantly modulated the transcription of genes involved in carbohydrate metabolism (gck and pfkfb4), cell growth and proliferation (sgk2 and htra1), apoptosis (gadd45b), lipid metabolism (fabp3, idi1, sqs), and immunity (igd, mx, ifit5, and mhcI). Hierarchical clustering and linear correlation analyses were performed to find gene expression patterns among the qPCR-analyzed transcripts, and connections between them and muscle and liver lipid composition. Overall, our results indicate that changes in the liver transcriptome and tissue lipid composition were driven by cholesterol synthesis up-regulation by ABP and VEG diets, and the lower carbohydrate intake in the ABP group. Two of the microarray-identified genes (sgk2 and htra1) might be key to explaining glucose metabolism regulation and the dietary-modulation of the immune system in fish. To evaluate the potential of these genes as predictive biomarkers, we subjected the qPCR data to a stepwise discriminant analysis. Three sets of no more than four genes were found to be able to predict, with high accuracy (67-94%), salmon growth and fatty acid composition. CONCLUSIONS: This study provides new findings on the impact of terrestrial animal and plant products on the nutrition and health of farmed Atlantic salmon, and a new method based on gene biomarkers for potentially predicting desired phenotypes, which could help formulate superior feeds for the Atlantic salmon aquaculture industry.
+SP  - 796
+EP  - 796
+VL  - 19
+IS  - 1
+AN  - 30390635
+UR  - https://www.ncbi.nlm.nih.gov/pubmed/30390635
+DO  - 10.1186/s12864-018-5188-6
+L2  - https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6215684/
+U1  - 30390635[pmid]
+U2  - PMC6215684[pmcid]
+U4  - 10.1186/s12864-018-5188-6[PII]
+J2  - BMC Genomics
+JF  - BMC genomics
+KW  - Aquaculture
+KW  - Atlantic salmon
+KW  - Cholesterol
+KW  - Lipid composition
+KW  - Liver transcriptome
+KW  - Marine ingredients
+KW  - Microarray
+KW  - Nutrigenomics
+KW  - Predictive biomarkers
+KW  - Terrestrial ingredients
+KW  - *Animal Feed/analysis
+KW  - Animals
+KW  - Biomarkers
+KW  - Computational Biology/methods
+KW  - Fatty Acids/metabolism
+KW  - *Fish Oils
+KW  - Gene Expression Profiling
+KW  - Gene Expression Regulation
+KW  - Liver/*metabolism
+KW  - Plant Oils
+KW  - Salmo salar/*genetics/growth & development/metabolism
+KW  - *Transcriptome
+PB  - BioMed Central
+ER  - 
