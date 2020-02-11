@@ -1,29 +1,35 @@
 ## Methods
 
-The two main steps in performing differential expression analysis are to
-estimate the relative abundance of transcripts, and to apply statistical
-models to test for differential expression between treatment groups.
-Estimating relative abundance is basically determining how many NGS
-reads match a given gene within a genome. In this module you’ll use
-Salmon
-(<span class="citeproc-not-found" data-reference-id="Patro">**???**</span>)
-to estimate relative abundance, tximport
-(<span class="citeproc-not-found" data-reference-id="Soneson">**???**</span>)
-to import the Salmon abundance estimates, and DESeq2
-(<span class="citeproc-not-found" data-reference-id="Love">**???**</span>)
-to perform statistical tests to identify differentially expressed genes.
+There are mainly two steps to do a differential express analysis. First
+we need to estimate relative abundance with salmon
+(<span class="citeproc-not-found" data-reference-id="Raithen">**???**</span>).
+Second we will apply statistical models to test the differential
+expression between groups with tximport.(Soneson, Love, and Robinson
+2015) Then use DESeq2(Caballero-Solares et al. 2018) to test the
+results. 21 22 23 \`\`\`{r, layout=“l-body-outset”,include=FALSE} 24
+library(knitr) 25 deannotated \<- read.csv(“deAnnotated.csv”, header =
+TRUE) 26 kable(deannotated)
 
-``` r
-library(knitr)
-deannotated <- read.csv("deAnnotated.csv", header = TRUE)
-kable(head(deannotated))
-```
+<div id="refs" class="references hanging-indent">
 
-| X | Row.names | log2FoldChange |      padj | Factor                        | trans                       |
-| -: | :-------- | -------------: | --------: | :---------------------------- | :-------------------------- |
-| 1 | ko:K00024 |    \-0.8911610 | 0.9452229 | Menthol\_Menthol\_vs\_Control | TRINITY\_DN9267\_c0\_g1\_i2 |
-| 2 | ko:K00024 |    \-0.8911610 | 0.9452229 | Menthol\_Menthol\_vs\_Control | TRINITY\_DN9446\_c0\_g1\_i1 |
-| 3 | ko:K00031 |    \-0.6698141 | 0.9452229 | Menthol\_Menthol\_vs\_Control | TRINITY\_DN9440\_c0\_g1\_i1 |
-| 4 | ko:K00128 |    \-0.2299678 | 0.9452229 | Menthol\_Menthol\_vs\_Control | TRINITY\_DN9333\_c0\_g1\_i1 |
-| 5 | ko:K00134 |      1.5188727 | 0.7036797 | Menthol\_Menthol\_vs\_Control | TRINITY\_DN9495\_c0\_g1\_i2 |
-| 6 | ko:K00134 |      1.5188727 | 0.7036797 | Menthol\_Menthol\_vs\_Control | TRINITY\_DN9495\_c0\_g1\_i1 |
+<div id="ref-Albert">
+
+Caballero-Solares, Albert, Xi Xue, Christopher C. Parrish, Maryam
+Beheshti Foroutani, Richard G. Taylor, and Matthew L. Rise. 2018.
+“Changes in the Liver Transcriptome of Farmed Atlantic Salmon (Salmo
+Salar) Fed Experimental Diets Based on Terrestrial Alternatives to Fish
+Meal and Fish Oil.” *BMC Genomics* 19 (1): 796–96.
+<https://doi.org/10.1186/s12864-018-5188-6>.
+
+</div>
+
+<div id="ref-Love">
+
+Soneson, Charlotte, Michael I. Love, and Mark D. Robinson. 2015.
+“Differential Analyses for RNA-Seq: Transcript-Level Estimates Improve
+Gene-Level Inferences.” *F1000Research* 4 (December): 1521–1.
+<https://www.ncbi.nlm.nih.gov/pubmed/26925227>.
+
+</div>
+
+</div>

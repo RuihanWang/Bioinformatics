@@ -7,6 +7,7 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Ruihan Wang" />
@@ -68,8 +69,6 @@ overflow: auto;
 margin-left: 2%;
 position: fixed;
 border: 1px solid #ccc;
-webkit-border-radius: 6px;
-moz-border-radius: 6px;
 border-radius: 6px;
 }
 
@@ -97,9 +96,14 @@ font-size: 12px;
 .tocify-subheader .tocify-subheader {
 text-indent: 30px;
 }
-
 .tocify-subheader .tocify-subheader .tocify-subheader {
 text-indent: 40px;
+}
+.tocify-subheader .tocify-subheader .tocify-subheader .tocify-subheader {
+text-indent: 50px;
+}
+.tocify-subheader .tocify-subheader .tocify-subheader .tocify-subheader .tocify-subheader {
+text-indent: 60px;
 }
 
 .tocify .tocify-item > a, .tocify .nav-list .nav-header {
@@ -503,13 +507,13 @@ float: none;
 
           item.append($("<a/>", {
 
-            "text": self.text()
+            "html": self.html()
 
           }));
 
         } else {
 
-          item.text(self.text());
+          item.html(self.html());
 
         }
 
@@ -1340,7 +1344,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -1414,48 +1417,9 @@ summary {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3,h4",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -1504,8 +1468,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -1549,72 +1511,15 @@ div.tocify {
 
 <div id="methods" class="section level2">
 <h2>Methods</h2>
-<p>The two main steps in performing differential expression analysis are to estimate the relative abundance of transcripts, and to apply statistical models to test for differential expression between treatment groups. Estimating relative abundance is basically determining how many NGS reads match a given gene within a genome. In this module you’ll use Salmon <span class="citation">(<span class="citeproc-not-found" data-reference-id="Patro"><strong>???</strong></span>)</span> to estimate relative abundance, tximport <span class="citation">(<span class="citeproc-not-found" data-reference-id="Soneson"><strong>???</strong></span>)</span> to import the Salmon abundance estimates, and DESeq2 <span class="citation">(<span class="citeproc-not-found" data-reference-id="Love"><strong>???</strong></span>)</span> to perform statistical tests to identify differentially expressed genes.</p>
-<pre class="r"><code>library(knitr)
-deannotated &lt;- read.csv(&quot;deAnnotated.csv&quot;, header = TRUE)
-kable(head(deannotated))</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">X</th>
-<th align="left">Row.names</th>
-<th align="right">log2FoldChange</th>
-<th align="right">padj</th>
-<th align="left">Factor</th>
-<th align="left">trans</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="left">ko:K00024</td>
-<td align="right">-0.8911610</td>
-<td align="right">0.9452229</td>
-<td align="left">Menthol_Menthol_vs_Control</td>
-<td align="left">TRINITY_DN9267_c0_g1_i2</td>
-</tr>
-<tr class="even">
-<td align="right">2</td>
-<td align="left">ko:K00024</td>
-<td align="right">-0.8911610</td>
-<td align="right">0.9452229</td>
-<td align="left">Menthol_Menthol_vs_Control</td>
-<td align="left">TRINITY_DN9446_c0_g1_i1</td>
-</tr>
-<tr class="odd">
-<td align="right">3</td>
-<td align="left">ko:K00031</td>
-<td align="right">-0.6698141</td>
-<td align="right">0.9452229</td>
-<td align="left">Menthol_Menthol_vs_Control</td>
-<td align="left">TRINITY_DN9440_c0_g1_i1</td>
-</tr>
-<tr class="even">
-<td align="right">4</td>
-<td align="left">ko:K00128</td>
-<td align="right">-0.2299678</td>
-<td align="right">0.9452229</td>
-<td align="left">Menthol_Menthol_vs_Control</td>
-<td align="left">TRINITY_DN9333_c0_g1_i1</td>
-</tr>
-<tr class="odd">
-<td align="right">5</td>
-<td align="left">ko:K00134</td>
-<td align="right">1.5188727</td>
-<td align="right">0.7036797</td>
-<td align="left">Menthol_Menthol_vs_Control</td>
-<td align="left">TRINITY_DN9495_c0_g1_i2</td>
-</tr>
-<tr class="even">
-<td align="right">6</td>
-<td align="left">ko:K00134</td>
-<td align="right">1.5188727</td>
-<td align="right">0.7036797</td>
-<td align="left">Menthol_Menthol_vs_Control</td>
-<td align="left">TRINITY_DN9495_c0_g1_i1</td>
-</tr>
-</tbody>
-</table>
+<p>There are mainly two steps to do a differential express analysis. First we need to estimate relative abundance with salmon <span class="citation">(<span class="citeproc-not-found" data-reference-id="Raithen"><strong>???</strong></span>)</span>. Second we will apply statistical models to test the differential expression between groups with tximport.<span class="citation">(Soneson, Love, and Robinson 2015)</span> Then use DESeq2<span class="citation">(Caballero-Solares et al. 2018)</span> to test the results. 21 22 23 ```{r, layout=“l-body-outset”,include=FALSE} 24 library(knitr) 25 deannotated &lt;- read.csv(“deAnnotated.csv”, header = TRUE) 26 kable(deannotated)</p>
+<div id="refs" class="references hanging-indent">
+<div id="ref-Albert">
+<p>Caballero-Solares, Albert, Xi Xue, Christopher C. Parrish, Maryam Beheshti Foroutani, Richard G. Taylor, and Matthew L. Rise. 2018. “Changes in the Liver Transcriptome of Farmed Atlantic Salmon (Salmo Salar) Fed Experimental Diets Based on Terrestrial Alternatives to Fish Meal and Fish Oil.” <em>BMC Genomics</em> 19 (1): 796–96. <a href="https://doi.org/10.1186/s12864-018-5188-6">https://doi.org/10.1186/s12864-018-5188-6</a>.</p>
+</div>
+<div id="ref-Love">
+<p>Soneson, Charlotte, Michael I. Love, and Mark D. Robinson. 2015. “Differential Analyses for RNA-Seq: Transcript-Level Estimates Improve Gene-Level Inferences.” <em>F1000Research</em> 4 (December): 1521–1. <a href="https://www.ncbi.nlm.nih.gov/pubmed/26925227">https://www.ncbi.nlm.nih.gov/pubmed/26925227</a>.</p>
+</div>
+</div>
 </div>
 
 
@@ -1635,6 +1540,49 @@ $(document).ready(function () {
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
