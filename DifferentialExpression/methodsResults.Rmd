@@ -23,7 +23,7 @@ relative abundance, tximport [@Soneson] to import the Salmon abundance
 estimates, and DESeq2 [@Love] to perform statistical tests to identify
 differentially expressed genes.
 
-```{r, include = FALSE}
+```{r, echo=FALSE}
 deannotated <- read.csv("deAnnotated.csv",header=TRUE)
 deannotated
 ``` 
