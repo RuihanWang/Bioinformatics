@@ -7,7 +7,6 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Ruihan Wang" />
@@ -69,6 +68,8 @@ overflow: auto;
 margin-left: 2%;
 position: fixed;
 border: 1px solid #ccc;
+webkit-border-radius: 6px;
+moz-border-radius: 6px;
 border-radius: 6px;
 }
 
@@ -96,14 +97,9 @@ font-size: 12px;
 .tocify-subheader .tocify-subheader {
 text-indent: 30px;
 }
+
 .tocify-subheader .tocify-subheader .tocify-subheader {
 text-indent: 40px;
-}
-.tocify-subheader .tocify-subheader .tocify-subheader .tocify-subheader {
-text-indent: 50px;
-}
-.tocify-subheader .tocify-subheader .tocify-subheader .tocify-subheader .tocify-subheader {
-text-indent: 60px;
 }
 
 .tocify .tocify-item > a, .tocify .nav-list .nav-header {
@@ -507,13 +503,13 @@ float: none;
 
           item.append($("<a/>", {
 
-            "html": self.html()
+            "text": self.text()
 
           }));
 
         } else {
 
-          item.html(self.html());
+          item.text(self.text());
 
         }
 
@@ -1344,6 +1340,7 @@ code {
 }
 img {
   max-width:100%;
+  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -1417,9 +1414,48 @@ summary {
 }
 </style>
 
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
 <!-- code folding -->
 
 
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <style type="text/css">
 
@@ -1468,6 +1504,8 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -1513,12 +1551,36 @@ div.tocify {
 <h2>Methods</h2>
 <div id="section" class="section level3">
 <h3>1</h3>
-<p>get the genome info from from <a href="ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_27/GRCh38.primary_assembly.genome.fa.gz" class="uri">ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_27/GRCh38.primary_assembly.genome.fa.gz</a> and then etrieve reads in SRA (script getGenome.sh and getReads.sh) ### 2 Using Trimmomatict do Quality trim (script trimReads.sh)<span class="citation">(Bolger, Lohse, and Usadel 2014)</span> ### 3 Index the genome for use by BWA (indexGenome.sh)<span class="citation">(Abuín et al. 2016)</span> ### 4 Align the reads using bwa mem (alignReads.sh)<span class="citation">(Zhang, Liu, and Dong 2019)</span> ### 5 Using samtool to sort the file (script sort.sh)<span class="citation">(Ramirez-Gonzalez et al. 2012)</span> ### 6 Using samtool to index reads (script indexReads.sh)<span class="citation">(Li et al. 2009)</span> ### 7 Using DeepVariant to do a analysis (script runDeepVariant.sh) to generate a VCF file<span class="citation">(Supernat et al. 2018)</span></p>
+<p>get the genome info from from <a href="ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_27/GRCh38.primary_assembly.genome.fa.gz" class="uri">ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_27/GRCh38.primary_assembly.genome.fa.gz</a> and then etrieve reads in SRA (script getGenome.sh and getReads.sh)</p>
+</div>
+<div id="section-1" class="section level3">
+<h3>2</h3>
+<p>Using Trimmomatict do Quality trim (script trimReads.sh)<span class="citation">(Bolger, Lohse, and Usadel 2014)</span></p>
+</div>
+<div id="section-2" class="section level3">
+<h3>3</h3>
+<p>Index the genome for use by BWA (indexGenome.sh)<span class="citation">(Abuín et al. 2016)</span></p>
+</div>
+<div id="section-3" class="section level3">
+<h3>4</h3>
+<p>Align the reads using bwa mem (alignReads.sh)<span class="citation">(Zhang, Liu, and Dong 2019)</span></p>
+</div>
+<div id="section-4" class="section level3">
+<h3>5</h3>
+<p>Using samtool to sort the file (script sort.sh)<span class="citation">(Ramirez-Gonzalez et al. 2012)</span></p>
+</div>
+<div id="section-5" class="section level3">
+<h3>6</h3>
+<p>Using samtool to index reads (script indexReads.sh)<span class="citation">(Li et al. 2009)</span></p>
+</div>
+<div id="section-6" class="section level3">
+<h3>7</h3>
+<p>Using DeepVariant to do a analysis (script runDeepVariant.sh) to generate a VCF file<span class="citation">(Supernat et al. 2018)</span></p>
 </div>
 </div>
 <div id="referenece" class="section level2 unnumbered">
-<h2 class="unnumbered">Referenece</h2>
-<div id="refs" class="references hanging-indent">
+<h2>Referenece</h2>
+<div id="refs" class="references">
 <div id="ref-index">
 <p>Abuín, José M., Juan C. Pichel, Tomás F. Pena, and Jorge Amigo. 2016. “SparkBWA: Speeding up the Alignment of High-Throughput DNA Sequencing Data.” <em>PloS One</em> 11 (5): e0155461–e0155461. <a href="https://doi.org/10.1371/journal.pone.0155461">https://doi.org/10.1371/journal.pone.0155461</a>.</p>
 </div>
@@ -1558,49 +1620,6 @@ $(document).ready(function () {
 });
 
 
-</script>
-
-<!-- tabsets -->
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
-<!-- code folding -->
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3,h4",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

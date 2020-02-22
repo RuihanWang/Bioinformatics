@@ -6,14 +6,33 @@ Methods
 get the genome info from from
 <a href="ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_27/GRCh38.primary_assembly.genome.fa.gz" class="uri">ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_27/GRCh38.primary_assembly.genome.fa.gz</a>
 and then etrieve reads in SRA (script getGenome.sh and getReads.sh)
-\#\#\# 2 Using Trimmomatict do Quality trim (script
-trimReads.sh)(Bolger, Lohse, and Usadel 2014) \#\#\# 3 Index the genome
-for use by BWA (indexGenome.sh)(Abuín et al. 2016) \#\#\# 4 Align the
-reads using bwa mem (alignReads.sh)(Zhang, Liu, and Dong 2019) \#\#\# 5
+
+### 2
+
+Using Trimmomatict do Quality trim (script trimReads.sh)(Bolger, Lohse,
+and Usadel 2014)
+
+### 3
+
+Index the genome for use by BWA (indexGenome.sh)(Abuín et al. 2016)
+
+### 4
+
+Align the reads using bwa mem (alignReads.sh)(Zhang, Liu, and Dong 2019)
+
+### 5
+
 Using samtool to sort the file (script sort.sh)(Ramirez-Gonzalez et al.
-2012) \#\#\# 6 Using samtool to index reads (script indexReads.sh)(Li et
-al. 2009) \#\#\# 7 Using DeepVariant to do a analysis (script
-runDeepVariant.sh) to generate a VCF file(Supernat et al. 2018)
+2012)
+
+### 6
+
+Using samtool to index reads (script indexReads.sh)(Li et al. 2009)
+
+### 7
+
+Using DeepVariant to do a analysis (script runDeepVariant.sh) to
+generate a VCF file(Supernat et al. 2018)
 
 Referenece
 ----------
