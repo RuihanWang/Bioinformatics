@@ -1,0 +1,26 @@
+TY  - JOUR
+DB  - PubMed
+AU  - Ramirez-Gonzalez, Ricardo H
+AU  - Bonnal, Raoul
+AU  - Caccamo, Mario
+AU  - Maclean, Daniel
+T1  - Bio-samtools: Ruby bindings for SAMtools, a library for accessing BAM files containing high-throughput sequence alignments
+LA  - eng
+SN  - 1751-0473
+Y1  - 2012/05/28
+AB  - BACKGROUND: The SAMtools utilities comprise a very useful and widely used suite of software for manipulating files and alignments in the SAM and BAM format, used in a wide range of genetic analyses. The SAMtools utilities are implemented in C and provide an API for programmatic access, to help make this functionality available to programmers wishing to develop in the high level Ruby language we have developed bio-samtools, a Ruby binding to the SAMtools library. RESULTS: The utility of SAMtools is encapsulated in 3 main classes, Bio::DB::Sam, representing the alignment files and providing access to the data in them, Bio::DB::Alignment, representing the individual read alignments inside the files and Bio::DB::Pileup, representing the summarised nucleotides of reads over a single point in the nucleotide sequence to which the reads are aligned. CONCLUSIONS: Bio-samtools is a flexible and easy to use interface that programmers of many levels of experience can use to access information in the popular and common SAM/BAM format.
+SP  - 6
+EP  - 6
+VL  - 7
+IS  - 1
+AN  - 22640879
+UR  - https://pubmed.ncbi.nlm.nih.gov/22640879
+DO  - 10.1186/1751-0473-7-6
+L2  - https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3473260/
+U1  - 22640879[pmid]
+U2  - PMC3473260[pmcid]
+U4  - 1751-0473-7-6[PII]
+J2  - Source Code Biol Med
+JF  - Source code for biology and medicine
+PB  - BioMed Central
+ER  - 
