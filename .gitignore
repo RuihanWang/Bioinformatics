@@ -1,4 +1,7 @@
-.Rproj.user
+!*.nex
+!*.pdf
+!*.png
+!*.xml
 .Rhistory
 .RData
 .Ruserdata
