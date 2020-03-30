@@ -19,3 +19,4 @@
 !*.html
 !*.ris
 !APOE_refseq_transcript.fasta
+.Rproj.user
