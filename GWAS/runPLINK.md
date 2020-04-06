@@ -1,11 +1,13 @@
+## GWAS
+
 ``` bash
 plink --file hapmap1
 plink --file hapmap1 --make-bed --out hapmap1
 plink --file hapmap1 --make-bed --mind 0.05 --out highgeno
 plink --bfile hapmap1
 plink --bfile hapmap1 --missing --out miss_stat
-#more miss_stat.lmiss
-#more miss_stat.imiss
+more miss_stat.lmiss
+more miss_stat.imiss
 plink --bfile hapmap1 --chr 1 --out res1 --missing
 plink --bfile hapmap1 --chr 2 --out res2 --missing
 plink --bfile hapmap1 --freq --out freq_stat
@@ -22,7 +24,7 @@ plink --bfile hapmap1 --model --cell 0 --snp rs2222162 --out mod2
 plink --bfile hapmap1 --cluster --mc 2 --ppc 0.05 --out str1
 more str1.cluster1
 plink --bfile hapmap1 --mh --within str1.cluster2 --adjust --out aac1
-#more aac1.cmh.adjusted
+more aac1.cmh.adjusted
 plink --bfile hapmap1 --cluster --cc --ppc 0.01 --out version2
 plink --bfile hapmap1 --mh --within version2.cluster2 --adjust --out aac2
 plink --bfile hapmap1 --cluster --K 2 --out version3
@@ -76,6 +78,16 @@ summary(glm(PHENOTYPE-1 ~ rs2222162_1, data=d, family="binomial"))
     ## 
     ## Number of Fisher Scoring iterations: 4
 
-## R Markdown
+``` r
+s <- read.table("miss_stat.lmiss",header = T)
+knitr::kable(head(s),"markdown")
+```
 
-### Have a try on the Rmarkdown as well as PLINK
+| CHR | SNP       | N\_MISS | N\_GENO | F\_MISS |
+| --: | :-------- | ------: | ------: | ------: |
+|   1 | rs6681049 |       0 |      89 |       0 |
+|   1 | rs4074137 |       0 |      89 |       0 |
+|   1 | rs7540009 |       0 |      89 |       0 |
+|   1 | rs1891905 |       0 |      89 |       0 |
+|   1 | rs9729550 |       0 |      89 |       0 |
+|   1 | rs3813196 |       0 |      89 |       0 |

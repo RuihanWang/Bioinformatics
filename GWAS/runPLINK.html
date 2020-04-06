@@ -1547,13 +1547,15 @@ div.tocify {
 </div>
 
 
+<div id="gwas" class="section level2">
+<h2>GWAS</h2>
 <pre class="bash"><code>plink --file hapmap1
 plink --file hapmap1 --make-bed --out hapmap1
 plink --file hapmap1 --make-bed --mind 0.05 --out highgeno
 plink --bfile hapmap1
 plink --bfile hapmap1 --missing --out miss_stat
-#more miss_stat.lmiss
-#more miss_stat.imiss
+more miss_stat.lmiss
+more miss_stat.imiss
 plink --bfile hapmap1 --chr 1 --out res1 --missing
 plink --bfile hapmap1 --chr 2 --out res2 --missing
 plink --bfile hapmap1 --freq --out freq_stat
@@ -1570,7 +1572,7 @@ plink --bfile hapmap1 --model --cell 0 --snp rs2222162 --out mod2
 plink --bfile hapmap1 --cluster --mc 2 --ppc 0.05 --out str1
 more str1.cluster1
 plink --bfile hapmap1 --mh --within str1.cluster2 --adjust --out aac1
-#more aac1.cmh.adjusted
+more aac1.cmh.adjusted
 plink --bfile hapmap1 --cluster --cc --ppc 0.01 --out version2
 plink --bfile hapmap1 --mh --within version2.cluster2 --adjust --out aac2
 plink --bfile hapmap1 --cluster --K 2 --out version3
@@ -1611,11 +1613,63 @@ summary(glm(PHENOTYPE-1 ~ rs2222162_1, data=d, family=&quot;binomial&quot;))</co
 ## AIC: 106.64
 ## 
 ## Number of Fisher Scoring iterations: 4</code></pre>
-<div id="r-markdown" class="section level2">
-<h2>R Markdown</h2>
-<div id="have-a-try-on-the-rmarkdown-as-well-as-plink" class="section level3">
-<h3>Have a try on the Rmarkdown as well as PLINK</h3>
-</div>
+<pre class="r"><code>s &lt;- read.table(&quot;miss_stat.lmiss&quot;,header = T)
+knitr::kable(head(s),&quot;markdown&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">CHR</th>
+<th align="left">SNP</th>
+<th align="right">N_MISS</th>
+<th align="right">N_GENO</th>
+<th align="right">F_MISS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs6681049</td>
+<td align="right">0</td>
+<td align="right">89</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs4074137</td>
+<td align="right">0</td>
+<td align="right">89</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs7540009</td>
+<td align="right">0</td>
+<td align="right">89</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs1891905</td>
+<td align="right">0</td>
+<td align="right">89</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs9729550</td>
+<td align="right">0</td>
+<td align="right">89</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs3813196</td>
+<td align="right">0</td>
+<td align="right">89</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
