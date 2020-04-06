@@ -951,7 +951,7 @@ plink --bfile hapmap1 --assoc --pheno qt.phe --out quant1
 plink --bfile hapmap1 --assoc --pheno qt.phe --perm --within str1.cluster2 --out quant2
 plink --bfile hapmap1 --assoc --pheno qt.phe --mperm 1000 --within str1.cluster2 --out quant3
 plink --bfile hapmap1 --pheno qt.phe --gxe --covar pop.phe --snp rs2222162 --out quant3
-plink --bfile hapmap1 --snp rs2222162 --recodeAD --out rec_snp1
+plink --bfile hapmap1 --snp rs2222162 --recodeAD --out rec_snp1.recode
 ```
 
     ## PLINK v1.90b4.9 64-bit (13 Oct 2017)           www.cog-genomics.org/plink/1.9/
@@ -3007,10 +3007,10 @@ plink --bfile hapmap1 --snp rs2222162 --recodeAD --out rec_snp1
     ## PLINK v1.90b4.9 64-bit (13 Oct 2017)           www.cog-genomics.org/plink/1.9/
     ## (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
     ## Note: --recodeAD flag deprecated.  Use 'recode AD ...'.
-    ## Logging to rec_snp1.log.
+    ## Logging to rec_snp1.recode.log.
     ## Options in effect:
     ##   --bfile hapmap1
-    ##   --out rec_snp1
+    ##   --out rec_snp1.recode
     ##   --recode AD
     ##   --snp rs2222162
     ## 
@@ -3023,10 +3023,36 @@ plink --bfile hapmap1 --snp rs2222162 --recodeAD --out rec_snp1
     ## Calculating allele frequencies... 0%1%2%3%4%5%6%7%8%9%10%11%12%13%14%15%16%17%18%19%20%21%22%23%24%25%26%27%28%29%30%31%32%33%34%35%36%37%38%39%40%41%42%43%44%45%46%47%48%49%50%51%52%53%54%55%56%57%58%59%60%61%62%63%64%65%66%67%68%69%70%71%72%73%74%75%76%77%78%79%80%81%82%83%84%85%86%87%88%89%90%91%92%93%94%95%96%97%98%99% done.
     ## 1 variant and 89 people pass filters and QC.
     ## Among remaining phenotypes, 44 are cases and 45 are controls.
-    ## --recode AD to rec_snp1.raw ... 0%1%2%3%4%5%6%7%8%9%10%11%12%13%14%15%16%17%18%19%20%21%22%23%24%25%26%27%28%29%30%31%32%33%34%35%36%37%38%39%40%41%42%43%44%45%46%47%48%49%50%51%52%53%54%55%56%57%58%59%60%61%62%63%64%65%66%67%68%69%70%71%72%73%74%75%76%77%78%79%80%81%82%83%84%85%86%87%88%89%90%91%92%93%94%95%96%97%98%99%done.
+    ## --recode AD to rec_snp1.recode.raw ... 0%1%2%3%4%5%6%7%8%9%10%11%12%13%14%15%16%17%18%19%20%21%22%23%24%25%26%27%28%29%30%31%32%33%34%35%36%37%38%39%40%41%42%43%44%45%46%47%48%49%50%51%52%53%54%55%56%57%58%59%60%61%62%63%64%65%66%67%68%69%70%71%72%73%74%75%76%77%78%79%80%81%82%83%84%85%86%87%88%89%90%91%92%93%94%95%96%97%98%99%done.
 
-d \<- read.table(“rec\_snp1.recode.raw” , header=T)
-summary(glm(PHENOTYPE-1 \~ rs2222162\_A, data=d, family=“binomial”))
+``` r
+d <- read.table("rec_snp1.recode.raw" , header=T)
+summary(glm(PHENOTYPE-1 ~ rs2222162_1, data=d, family="binomial"))
+```
+
+    ## 
+    ## Call:
+    ## glm(formula = PHENOTYPE - 1 ~ rs2222162_1, family = "binomial", 
+    ##     data = d)
+    ## 
+    ## Deviance Residuals: 
+    ##     Min       1Q   Median       3Q      Max  
+    ## -1.7690  -1.1042  -0.5848   0.6851   1.9238  
+    ## 
+    ## Coefficients:
+    ##             Estimate Std. Error z value Pr(>|z|)    
+    ## (Intercept)   1.3300     0.4107   3.238   0.0012 ** 
+    ## rs2222162_1  -1.5047     0.3765  -3.997 6.42e-05 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## (Dispersion parameter for binomial family taken to be 1)
+    ## 
+    ##     Null deviance: 123.37  on 88  degrees of freedom
+    ## Residual deviance: 102.64  on 87  degrees of freedom
+    ## AIC: 106.64
+    ## 
+    ## Number of Fisher Scoring iterations: 4
 
 ## R Markdown
 

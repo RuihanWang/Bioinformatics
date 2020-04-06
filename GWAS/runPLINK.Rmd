@@ -58,12 +58,12 @@ plink --bfile hapmap1 --assoc --pheno qt.phe --out quant1
 plink --bfile hapmap1 --assoc --pheno qt.phe --perm --within str1.cluster2 --out quant2
 plink --bfile hapmap1 --assoc --pheno qt.phe --mperm 1000 --within str1.cluster2 --out quant3
 plink --bfile hapmap1 --pheno qt.phe --gxe --covar pop.phe --snp rs2222162 --out quant3
-plink --bfile hapmap1 --snp rs2222162 --recodeAD --out rec_snp1
+plink --bfile hapmap1 --snp rs2222162 --recodeAD --out rec_snp1.recode
 ```
-
+```{r}
 d <- read.table("rec_snp1.recode.raw" , header=T)
-summary(glm(PHENOTYPE-1 ~ rs2222162_A, data=d, family="binomial"))
-
+summary(glm(PHENOTYPE-1 ~ rs2222162_1, data=d, family="binomial"))
+```
 ## R Markdown
 
 
