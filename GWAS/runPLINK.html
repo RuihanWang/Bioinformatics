@@ -1547,8 +1547,13 @@ div.tocify {
 </div>
 
 
-<div id="gwas" class="section level2">
-<h2>GWAS</h2>
+<div id="assignment-10-gwas" class="section level2">
+<h2>Assignment 10 GWAS</h2>
+<div id="genome-wide-association-studies-gwas-use-dense-maps-of-snps-that-cover-the-human-genome-to-look-for-allele-frequency-differences-between-cases-patients-with-a-specific-disease-or-individuals-with-a-certain-trait-and-controls.1-a-significant-frequency-difference-is-taken-to-indicate-that-the-corresponding-region-of-the-genome-contains-functional-dna-sequence-variants-that-influence-the-disease-or-trait-in-question.-2" class="section level3">
+<h3>Genome-wide association studies (GWAS) use dense maps of SNPs that cover the human genome to look for allele-frequency differences between cases (patients with a specific disease or individuals with a certain trait) and controls.<span class="citation">(<span class="citeproc-not-found" data-reference-id="1"><strong>???</strong></span>)</span> A significant frequency difference is taken to indicate that the corresponding region of the genome contains functional DNA-sequence variants that influence the disease or trait in question. <span class="citation">(<span class="citeproc-not-found" data-reference-id="2"><strong>???</strong></span>)</span></h3>
+</div>
+<div id="the-below-example-are-using-plink-to-analyse-a-dummy-data-of-randomly-selected-genotypes-from-the-89-asian-hapmap-individuals.-we-perform-data-management-summary-statistics-populationstratification-and-basic-association-analysis.3-in-this-research-a-phenotype-has-been-simulated-based-on-the-genotype-at-one-snp-roughl-80000-autosomal-snps-are-being-analysised." class="section level3">
+<h3>The below example are using PLINK to analyse a dummy data of randomly selected genotypes from the 89 Asian HapMap individuals. We perform data management, summary statistics populationstratification and basic association analysis.<span class="citation">(<span class="citeproc-not-found" data-reference-id="3"><strong>???</strong></span>)</span> In this research, a phenotype has been simulated based on the genotype at one SNP, roughl 80,000 autosomal SNPs are being analysised.</h3>
 <pre class="bash"><code>plink --file hapmap1
 plink --file hapmap1 --make-bed --out hapmap1
 plink --file hapmap1 --make-bed --mind 0.05 --out highgeno
@@ -1565,9 +1570,32 @@ plink --bfile hapmap1 --snp rs1891905 --freq --within pop.phe --out snp1_frq_sta
 plink --bfile hapmap1 --assoc --out as1
 sort --key=7 -nr as1.assoc | head
 plink --bfile hapmap1 --assoc --adjust --out as2
-more as2.assoc.adjusted
-plink --bfile hapmap1 --pheno pop.phe --assoc --adjust --out as3
-plink --bfile hapmap1 --model --snp rs2222162 --out mod1
+more as2.assoc.adjusted</code></pre>
+<pre class="bash"><code>plink --bfile hapmap1 --pheno pop.phe --assoc --adjust --out as3</code></pre>
+<pre><code>## PLINK v1.90b4.9 64-bit (13 Oct 2017)           www.cog-genomics.org/plink/1.9/
+## (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+## Logging to as3.log.
+## Options in effect:
+##   --adjust
+##   --assoc
+##   --bfile hapmap1
+##   --out as3
+##   --pheno pop.phe
+## 
+## 193230 MB RAM detected; reserving 96615 MB for main workspace.
+## 83534 variants loaded from .bim file.
+## 89 people (89 males, 0 females) loaded from .fam.
+## 89 phenotype values present after --pheno.
+## Using 1 thread (no multithreaded calculations invoked).
+## Before main variant filters, 89 founders and 0 nonfounders present.
+## Calculating allele frequencies... 0%1%2%3%4%5%6%7%8%9%10%11%12%13%14%15%16%17%18%19%20%21%22%23%24%25%26%27%28%29%30%31%32%33%34%35%36%37%38%39%40%41%42%43%44%45%46%47%48%49%50%51%52%53%54%55%56%57%58%59%60%61%62%63%64%65%66%67%68%69%70%71%72%73%74%75%76%77%78%79%80%81%82%83%84%85%86%87%88%89%90%91%92%93%94%95%96%97%98%99% done.
+## Total genotyping rate is 0.99441.
+## 83534 variants and 89 people pass filters and QC.
+## Among remaining phenotypes, 44 are cases and 45 are controls.
+## Writing C/C --assoc report to as3.assoc ... 0%1%2%3%4%6%7%8%9%10%11%12%14%15%16%17%18%19%20%22%23%25%26%27%28%29%31%32%33%34%35%36%38%39%40%41%42%43%45%46%47%48%49%50%51%53%54%55%56%58%59%60%61%62%63%65%66%67%68%69%70%72%73%74%76%77%78%79%80%81%83%84%85%87%88%89%90%92%93%94%95%96%97%98%99%done.
+## --adjust: Genomic inflation est. lambda (based on median chisq) = 1.78854.
+## 0%1%2%3%4%5%6%7%8%9%10%11%12%13%14%15%16%17%18%19%20%21%22%23%24%25%26%27%28%29%30%31%32%33%34%35%36%37%38%39%40%41%42%43%44%45%46%47%48%49%50%51%52%53%54%55%56%57%58%59%60%61%62%63%64%65%66%67%68%69%70%71%72%73%74%75%76%77%78%79%80%81%82%83%84%85%86%87%88%89%90%91%92%93%94%95%96%97%98%99%--adjust values (68727 variants) written to as3.assoc.adjusted .</code></pre>
+<pre class="bash"><code>plink --bfile hapmap1 --model --snp rs2222162 --out mod1
 plink --bfile hapmap1 --model --cell 0 --snp rs2222162 --out mod2
 plink --bfile hapmap1 --cluster --mc 2 --ppc 0.05 --out str1
 more str1.cluster1
@@ -1588,33 +1616,8 @@ plink --bfile hapmap1 --assoc --pheno qt.phe --perm --within str1.cluster2 --out
 plink --bfile hapmap1 --assoc --pheno qt.phe --mperm 1000 --within str1.cluster2 --out quant3
 plink --bfile hapmap1 --pheno qt.phe --gxe --covar pop.phe --snp rs2222162 --out quant3
 plink --bfile hapmap1 --snp rs2222162 --recodeAD --out rec_snp1.recode</code></pre>
-<pre class="r"><code>d &lt;- read.table(&quot;rec_snp1.recode.raw&quot; , header=T)
-summary(glm(PHENOTYPE-1 ~ rs2222162_1, data=d, family=&quot;binomial&quot;))</code></pre>
-<pre><code>## 
-## Call:
-## glm(formula = PHENOTYPE - 1 ~ rs2222162_1, family = &quot;binomial&quot;, 
-##     data = d)
-## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -1.7690  -1.1042  -0.5848   0.6851   1.9238  
-## 
-## Coefficients:
-##             Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)   1.3300     0.4107   3.238   0.0012 ** 
-## rs2222162_1  -1.5047     0.3765  -3.997 6.42e-05 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## (Dispersion parameter for binomial family taken to be 1)
-## 
-##     Null deviance: 123.37  on 88  degrees of freedom
-## Residual deviance: 102.64  on 87  degrees of freedom
-## AIC: 106.64
-## 
-## Number of Fisher Scoring iterations: 4</code></pre>
-<pre class="r"><code>s &lt;- read.table(&quot;miss_stat.lmiss&quot;,header = T)
-knitr::kable(head(s),&quot;markdown&quot;)</code></pre>
+<pre class="r"><code>ss &lt;- read.table(&quot;miss_stat.lmiss&quot;,header = T)
+knitr::kable(head(ss),&quot;markdown&quot;)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -1670,6 +1673,1177 @@ knitr::kable(head(s),&quot;markdown&quot;)</code></pre>
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>i &lt;- read.table(&quot;miss_stat.imiss&quot;,header = T)
+knitr::kable(head(i),&quot;markdown&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">FID</th>
+<th align="right">IID</th>
+<th align="left">MISS_PHENO</th>
+<th align="right">N_MISS</th>
+<th align="right">N_GENO</th>
+<th align="right">F_MISS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HCB181</td>
+<td align="right">1</td>
+<td align="left">N</td>
+<td align="right">671</td>
+<td align="right">83534</td>
+<td align="right">0.008033</td>
+</tr>
+<tr class="even">
+<td align="left">HCB182</td>
+<td align="right">1</td>
+<td align="left">N</td>
+<td align="right">1156</td>
+<td align="right">83534</td>
+<td align="right">0.013840</td>
+</tr>
+<tr class="odd">
+<td align="left">HCB183</td>
+<td align="right">1</td>
+<td align="left">N</td>
+<td align="right">498</td>
+<td align="right">83534</td>
+<td align="right">0.005962</td>
+</tr>
+<tr class="even">
+<td align="left">HCB184</td>
+<td align="right">1</td>
+<td align="left">N</td>
+<td align="right">412</td>
+<td align="right">83534</td>
+<td align="right">0.004932</td>
+</tr>
+<tr class="odd">
+<td align="left">HCB185</td>
+<td align="right">1</td>
+<td align="left">N</td>
+<td align="right">329</td>
+<td align="right">83534</td>
+<td align="right">0.003939</td>
+</tr>
+<tr class="even">
+<td align="left">HCB186</td>
+<td align="right">1</td>
+<td align="left">N</td>
+<td align="right">1233</td>
+<td align="right">83534</td>
+<td align="right">0.014760</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>f &lt;- read.table(&quot;freq_stat.frq.strat&quot;,header = T)
+knitr::kable(head(f),&quot;markdown&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">CHR</th>
+<th align="left">SNP</th>
+<th align="right">CLST</th>
+<th align="right">A1</th>
+<th align="right">A2</th>
+<th align="right">MAF</th>
+<th align="right">MAC</th>
+<th align="right">NCHROBS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs6681049</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">0.23330</td>
+<td align="right">21</td>
+<td align="right">90</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs6681049</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">0.19320</td>
+<td align="right">17</td>
+<td align="right">88</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs4074137</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">0.10000</td>
+<td align="right">9</td>
+<td align="right">90</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs4074137</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">0.05682</td>
+<td align="right">5</td>
+<td align="right">88</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs7540009</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">0.00000</td>
+<td align="right">0</td>
+<td align="right">90</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs7540009</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">0.00000</td>
+<td align="right">0</td>
+<td align="right">88</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>a &lt;- read.table(&quot;as1.assoc&quot;,header = T)
+knitr::kable(head(a),&quot;markdown&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">CHR</th>
+<th align="left">SNP</th>
+<th align="right">BP</th>
+<th align="right">A1</th>
+<th align="right">F_A</th>
+<th align="right">F_U</th>
+<th align="right">A2</th>
+<th align="right">CHISQ</th>
+<th align="right">P</th>
+<th align="right">OR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs6681049</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.15910</td>
+<td align="right">0.26670</td>
+<td align="right">2</td>
+<td align="right">3.067000</td>
+<td align="right">0.07991</td>
+<td align="right">0.5203</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs4074137</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">0.07955</td>
+<td align="right">0.07778</td>
+<td align="right">2</td>
+<td align="right">0.001919</td>
+<td align="right">0.96510</td>
+<td align="right">1.0250</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs7540009</td>
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs1891905</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">0.40910</td>
+<td align="right">0.40000</td>
+<td align="right">2</td>
+<td align="right">0.015270</td>
+<td align="right">0.90170</td>
+<td align="right">1.0380</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs9729550</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">0.17050</td>
+<td align="right">0.08889</td>
+<td align="right">2</td>
+<td align="right">2.631000</td>
+<td align="right">0.10480</td>
+<td align="right">2.1060</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs3813196</td>
+<td align="right">6</td>
+<td align="right">1</td>
+<td align="right">0.03409</td>
+<td align="right">0.02222</td>
+<td align="right">2</td>
+<td align="right">0.229600</td>
+<td align="right">0.63180</td>
+<td align="right">1.5530</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>as &lt;- read.table(&quot;as2.assoc.adjusted&quot;,header = T)
+knitr::kable(head(as),&quot;markdown&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">CHR</th>
+<th align="left">SNP</th>
+<th align="right">UNADJ</th>
+<th align="right">GC</th>
+<th align="right">BONF</th>
+<th align="right">HOLM</th>
+<th align="right">SIDAK_SS</th>
+<th align="right">SIDAK_SD</th>
+<th align="right">FDR_BH</th>
+<th align="right">FDR_BY</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">13</td>
+<td align="left">rs9585021</td>
+<td align="right">5.6e-06</td>
+<td align="right">4.99e-05</td>
+<td align="right">0.3839</td>
+<td align="right">0.3839</td>
+<td align="right">0.3188</td>
+<td align="right">0.3188</td>
+<td align="right">0.09719</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">rs2222162</td>
+<td align="right">5.9e-06</td>
+<td align="right">5.23e-05</td>
+<td align="right">0.4068</td>
+<td align="right">0.4067</td>
+<td align="right">0.3342</td>
+<td align="right">0.3342</td>
+<td align="right">0.09719</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="left">rs10810856</td>
+<td align="right">7.7e-06</td>
+<td align="right">6.48e-05</td>
+<td align="right">0.5308</td>
+<td align="right">0.5308</td>
+<td align="right">0.4118</td>
+<td align="right">0.4118</td>
+<td align="right">0.09719</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">rs4675607</td>
+<td align="right">8.0e-06</td>
+<td align="right">6.70e-05</td>
+<td align="right">0.5533</td>
+<td align="right">0.5533</td>
+<td align="right">0.4249</td>
+<td align="right">0.4249</td>
+<td align="right">0.09719</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">rs4673349</td>
+<td align="right">8.5e-06</td>
+<td align="right">6.99e-05</td>
+<td align="right">0.5832</td>
+<td align="right">0.5831</td>
+<td align="right">0.4419</td>
+<td align="right">0.4419</td>
+<td align="right">0.09719</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">rs1375352</td>
+<td align="right">8.5e-06</td>
+<td align="right">6.99e-05</td>
+<td align="right">0.5832</td>
+<td align="right">0.5831</td>
+<td align="right">0.4419</td>
+<td align="right">0.4419</td>
+<td align="right">0.09719</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>as3 &lt;- read.table(&quot;as3.assoc.adjusted&quot;,header = T)
+knitr::kable(head(as3),&quot;markdown&quot;)</code></pre>
+<table>
+<colgroup>
+<col width="4%"></col>
+<col width="12%"></col>
+<col width="9%"></col>
+<col width="11%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="9%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">CHR</th>
+<th align="left">SNP</th>
+<th align="right">UNADJ</th>
+<th align="right">GC</th>
+<th align="right">BONF</th>
+<th align="right">HOLM</th>
+<th align="right">SIDAK_SS</th>
+<th align="right">SIDAK_SD</th>
+<th align="right">FDR_BH</th>
+<th align="right">FDR_BY</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">8</td>
+<td align="left">rs2585179</td>
+<td align="right">0.0e+00</td>
+<td align="right">0.0000322</td>
+<td align="right">0.001852</td>
+<td align="right">0.001852</td>
+<td align="right">0.001850</td>
+<td align="right">0.001850</td>
+<td align="right">0.001852</td>
+<td align="right">0.02169</td>
+</tr>
+<tr class="even">
+<td align="right">11</td>
+<td align="left">rs10768140</td>
+<td align="right">1.0e-07</td>
+<td align="right">0.0000545</td>
+<td align="right">0.004658</td>
+<td align="right">0.004658</td>
+<td align="right">0.004647</td>
+<td align="right">0.004647</td>
+<td align="right">0.002329</td>
+<td align="right">0.02728</td>
+</tr>
+<tr class="odd">
+<td align="right">15</td>
+<td align="left">rs4468542</td>
+<td align="right">1.0e-07</td>
+<td align="right">0.0000739</td>
+<td align="right">0.007931</td>
+<td align="right">0.007930</td>
+<td align="right">0.007899</td>
+<td align="right">0.007899</td>
+<td align="right">0.002644</td>
+<td align="right">0.03097</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="left">rs372440</td>
+<td align="right">7.0e-07</td>
+<td align="right">0.0002061</td>
+<td align="right">0.047590</td>
+<td align="right">0.047580</td>
+<td align="right">0.046470</td>
+<td align="right">0.046470</td>
+<td align="right">0.010820</td>
+<td align="right">0.12680</td>
+</tr>
+<tr class="odd">
+<td align="right">6</td>
+<td align="left">rs9395476</td>
+<td align="right">1.1e-06</td>
+<td align="right">0.0002692</td>
+<td align="right">0.075770</td>
+<td align="right">0.075760</td>
+<td align="right">0.072970</td>
+<td align="right">0.072960</td>
+<td align="right">0.010820</td>
+<td align="right">0.12680</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="left">rs512497</td>
+<td align="right">1.1e-06</td>
+<td align="right">0.0002692</td>
+<td align="right">0.075770</td>
+<td align="right">0.075760</td>
+<td align="right">0.072970</td>
+<td align="right">0.072960</td>
+<td align="right">0.010820</td>
+<td align="right">0.12680</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>aac &lt;- read.table(&quot;aac1.cmh.adjusted&quot;,header = T)
+knitr::kable(head(aac),&quot;markdown&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">CHR</th>
+<th align="left">SNP</th>
+<th align="right">UNADJ</th>
+<th align="right">GC</th>
+<th align="right">BONF</th>
+<th align="right">HOLM</th>
+<th align="right">SIDAK_SS</th>
+<th align="right">SIDAK_SD</th>
+<th align="right">FDR_BH</th>
+<th align="right">FDR_BY</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">13</td>
+<td align="left">rs9585021</td>
+<td align="right">1.90e-06</td>
+<td align="right">0.0000044</td>
+<td align="right">0.1274</td>
+<td align="right">0.1274</td>
+<td align="right">0.1196</td>
+<td align="right">0.1196</td>
+<td align="right">0.1274</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">21</td>
+<td align="left">rs3017432</td>
+<td align="right">2.21e-05</td>
+<td align="right">0.0000433</td>
+<td align="right">1.0000</td>
+<td align="right">1.0000</td>
+<td align="right">0.7716</td>
+<td align="right">0.7716</td>
+<td align="right">0.7384</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">rs2222162</td>
+<td align="right">4.47e-05</td>
+<td align="right">0.0000835</td>
+<td align="right">1.0000</td>
+<td align="right">1.0000</td>
+<td align="right">0.9496</td>
+<td align="right">0.9495</td>
+<td align="right">0.8734</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">17</td>
+<td align="left">rs3829612</td>
+<td align="right">7.18e-05</td>
+<td align="right">0.0001299</td>
+<td align="right">1.0000</td>
+<td align="right">1.0000</td>
+<td align="right">0.9918</td>
+<td align="right">0.9918</td>
+<td align="right">0.8734</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">rs4673349</td>
+<td align="right">9.62e-05</td>
+<td align="right">0.0001707</td>
+<td align="right">1.0000</td>
+<td align="right">1.0000</td>
+<td align="right">0.9984</td>
+<td align="right">0.9984</td>
+<td align="right">0.8734</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">rs1375352</td>
+<td align="right">9.62e-05</td>
+<td align="right">0.0001707</td>
+<td align="right">1.0000</td>
+<td align="right">1.0000</td>
+<td align="right">0.9984</td>
+<td align="right">0.9984</td>
+<td align="right">0.8734</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>aac2 &lt;- read.table(&quot;aac2.cmh.adjusted&quot;,header = T)
+knitr::kable(head(aac2),&quot;markdown&quot;)</code></pre>
+<table style="width:100%;">
+<colgroup>
+<col width="4%"></col>
+<col width="11%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="9%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">CHR</th>
+<th align="left">SNP</th>
+<th align="right">UNADJ</th>
+<th align="right">GC</th>
+<th align="right">BONF</th>
+<th align="right">HOLM</th>
+<th align="right">SIDAK_SS</th>
+<th align="right">SIDAK_SD</th>
+<th align="right">FDR_BH</th>
+<th align="right">FDR_BY</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">rs2222162</td>
+<td align="right">0.00e+00</td>
+<td align="right">0.00e+00</td>
+<td align="right">0.001013</td>
+<td align="right">0.001013</td>
+<td align="right">0.001013</td>
+<td align="right">0.001013</td>
+<td align="right">0.001013</td>
+<td align="right">0.01187</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">rs4675607</td>
+<td align="right">1.13e-05</td>
+<td align="right">1.48e-05</td>
+<td align="right">0.779400</td>
+<td align="right">0.779400</td>
+<td align="right">0.541300</td>
+<td align="right">0.541300</td>
+<td align="right">0.277900</td>
+<td align="right">1.00000</td>
+</tr>
+<tr class="odd">
+<td align="right">13</td>
+<td align="left">rs9585021</td>
+<td align="right">1.21e-05</td>
+<td align="right">1.58e-05</td>
+<td align="right">0.833800</td>
+<td align="right">0.833800</td>
+<td align="right">0.565600</td>
+<td align="right">0.565600</td>
+<td align="right">0.277900</td>
+<td align="right">1.00000</td>
+</tr>
+<tr class="even">
+<td align="right">9</td>
+<td align="left">rs7046471</td>
+<td align="right">3.37e-05</td>
+<td align="right">4.28e-05</td>
+<td align="right">1.000000</td>
+<td align="right">1.000000</td>
+<td align="right">0.901500</td>
+<td align="right">0.901500</td>
+<td align="right">0.429600</td>
+<td align="right">1.00000</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">rs4673349</td>
+<td align="right">3.75e-05</td>
+<td align="right">4.75e-05</td>
+<td align="right">1.000000</td>
+<td align="right">1.000000</td>
+<td align="right">0.924000</td>
+<td align="right">0.924000</td>
+<td align="right">0.429600</td>
+<td align="right">1.00000</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">rs1375352</td>
+<td align="right">3.75e-05</td>
+<td align="right">4.75e-05</td>
+<td align="right">1.000000</td>
+<td align="right">1.000000</td>
+<td align="right">0.924000</td>
+<td align="right">0.924000</td>
+<td align="right">0.429600</td>
+<td align="right">1.00000</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>aac3 &lt;- read.table(&quot;aac3.cmh.adjusted&quot;,header = T)
+knitr::kable(head(aac3),&quot;markdown&quot;)</code></pre>
+<table>
+<colgroup>
+<col width="4%"></col>
+<col width="10%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">CHR</th>
+<th align="left">SNP</th>
+<th align="right">UNADJ</th>
+<th align="right">GC</th>
+<th align="right">BONF</th>
+<th align="right">HOLM</th>
+<th align="right">SIDAK_SS</th>
+<th align="right">SIDAK_SD</th>
+<th align="right">FDR_BH</th>
+<th align="right">FDR_BY</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">rs2222162</td>
+<td align="right">0.00e+00</td>
+<td align="right">0.00e+00</td>
+<td align="right">0.0000178</td>
+<td align="right">0.0000178</td>
+<td align="right">0.0000178</td>
+<td align="right">0.0000178</td>
+<td align="right">0.0000178</td>
+<td align="right">0.0002089</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">rs4675607</td>
+<td align="right">4.00e-06</td>
+<td align="right">4.00e-06</td>
+<td align="right">0.2770000</td>
+<td align="right">0.2770000</td>
+<td align="right">0.2419000</td>
+<td align="right">0.2419000</td>
+<td align="right">0.1385000</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">rs4673349</td>
+<td align="right">1.20e-05</td>
+<td align="right">1.20e-05</td>
+<td align="right">0.8276000</td>
+<td align="right">0.8276000</td>
+<td align="right">0.5629000</td>
+<td align="right">0.5629000</td>
+<td align="right">0.1679000</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">rs1375352</td>
+<td align="right">1.20e-05</td>
+<td align="right">1.20e-05</td>
+<td align="right">0.8276000</td>
+<td align="right">0.8276000</td>
+<td align="right">0.5629000</td>
+<td align="right">0.5629000</td>
+<td align="right">0.1679000</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="odd">
+<td align="right">13</td>
+<td align="left">rs9585021</td>
+<td align="right">1.22e-05</td>
+<td align="right">1.22e-05</td>
+<td align="right">0.8395000</td>
+<td align="right">0.8395000</td>
+<td align="right">0.5681000</td>
+<td align="right">0.5681000</td>
+<td align="right">0.1679000</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">rs2176427</td>
+<td align="right">4.31e-05</td>
+<td align="right">4.31e-05</td>
+<td align="right">1.0000000</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9483000</td>
+<td align="right">0.9483000</td>
+<td align="right">0.4936000</td>
+<td align="right">1.0000000</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>m &lt;- read.table(&quot;mod1.model&quot;,header = T)
+knitr::kable(m, &quot;markdown&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">CHR</th>
+<th align="left">SNP</th>
+<th align="right">A1</th>
+<th align="right">A2</th>
+<th align="left">TEST</th>
+<th align="left">AFF</th>
+<th align="left">UNAFF</th>
+<th align="right">CHISQ</th>
+<th align="right">DF</th>
+<th align="right">P</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">rs2222162</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">GENO</td>
+<td align="left">3/19/22</td>
+<td align="left">17/22/6</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">rs2222162</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">TREND</td>
+<td align="left">25/63</td>
+<td align="left">56/34</td>
+<td align="right">19.15</td>
+<td align="right">1</td>
+<td align="right">1.21e-05</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">rs2222162</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">ALLELIC</td>
+<td align="left">25/63</td>
+<td align="left">56/34</td>
+<td align="right">20.51</td>
+<td align="right">1</td>
+<td align="right">5.90e-06</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">rs2222162</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">DOM</td>
+<td align="left">22/22</td>
+<td align="left">39/6</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">rs2222162</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">REC</td>
+<td align="left">3/41</td>
+<td align="left">17/28</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>m &lt;- read.table(&quot;mod2.model&quot;,header = T)
+knitr::kable(m, &quot;markdown&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">CHR</th>
+<th align="left">SNP</th>
+<th align="right">A1</th>
+<th align="right">A2</th>
+<th align="left">TEST</th>
+<th align="left">AFF</th>
+<th align="left">UNAFF</th>
+<th align="right">CHISQ</th>
+<th align="right">DF</th>
+<th align="right">P</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">rs2222162</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">GENO</td>
+<td align="left">3/19/22</td>
+<td align="left">17/22/6</td>
+<td align="right">19.15</td>
+<td align="right">2</td>
+<td align="right">0.0000693</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">rs2222162</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">TREND</td>
+<td align="left">25/63</td>
+<td align="left">56/34</td>
+<td align="right">19.15</td>
+<td align="right">1</td>
+<td align="right">0.0000121</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">rs2222162</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">ALLELIC</td>
+<td align="left">25/63</td>
+<td align="left">56/34</td>
+<td align="right">20.51</td>
+<td align="right">1</td>
+<td align="right">0.0000059</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">rs2222162</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">DOM</td>
+<td align="left">22/22</td>
+<td align="left">39/6</td>
+<td align="right">13.87</td>
+<td align="right">1</td>
+<td align="right">0.0001958</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">rs2222162</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">REC</td>
+<td align="left">3/41</td>
+<td align="left">17/28</td>
+<td align="right">12.24</td>
+<td align="right">1</td>
+<td align="right">0.0004679</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>quant1.qassoc  &lt;- read.table(&quot;quant1.qassoc&quot;,header = T)
+knitr::kable(head(quant1.qassoc),&quot;markdown&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">CHR</th>
+<th align="left">SNP</th>
+<th align="right">BP</th>
+<th align="right">NMISS</th>
+<th align="right">BETA</th>
+<th align="right">SE</th>
+<th align="right">R2</th>
+<th align="right">T</th>
+<th align="right">P</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs6681049</td>
+<td align="right">1</td>
+<td align="right">89</td>
+<td align="right">-0.2266</td>
+<td align="right">0.3626</td>
+<td align="right">0.004469</td>
+<td align="right">-0.6249</td>
+<td align="right">0.5336</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs4074137</td>
+<td align="right">2</td>
+<td align="right">89</td>
+<td align="right">-0.2949</td>
+<td align="right">0.6005</td>
+<td align="right">0.002765</td>
+<td align="right">-0.4911</td>
+<td align="right">0.6246</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs7540009</td>
+<td align="right">3</td>
+<td align="right">89</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs1891905</td>
+<td align="right">4</td>
+<td align="right">89</td>
+<td align="right">-0.1053</td>
+<td align="right">0.3165</td>
+<td align="right">0.001272</td>
+<td align="right">-0.3328</td>
+<td align="right">0.7401</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs9729550</td>
+<td align="right">5</td>
+<td align="right">89</td>
+<td align="right">0.5402</td>
+<td align="right">0.4616</td>
+<td align="right">0.015500</td>
+<td align="right">1.1700</td>
+<td align="right">0.2451</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs3813196</td>
+<td align="right">6</td>
+<td align="right">89</td>
+<td align="right">0.8053</td>
+<td align="right">1.0250</td>
+<td align="right">0.007050</td>
+<td align="right">0.7859</td>
+<td align="right">0.4340</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>quant2.qassoc  &lt;- read.table(&quot;quant2.qassoc&quot;,header = T)
+knitr::kable(head(quant2.qassoc),&quot;markdown&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">CHR</th>
+<th align="left">SNP</th>
+<th align="right">BP</th>
+<th align="right">NMISS</th>
+<th align="right">BETA</th>
+<th align="right">SE</th>
+<th align="right">R2</th>
+<th align="right">T</th>
+<th align="right">P</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs6681049</td>
+<td align="right">1</td>
+<td align="right">89</td>
+<td align="right">-0.2266</td>
+<td align="right">0.3626</td>
+<td align="right">0.004469</td>
+<td align="right">-0.6249</td>
+<td align="right">0.5336</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs4074137</td>
+<td align="right">2</td>
+<td align="right">89</td>
+<td align="right">-0.2949</td>
+<td align="right">0.6005</td>
+<td align="right">0.002765</td>
+<td align="right">-0.4911</td>
+<td align="right">0.6246</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs7540009</td>
+<td align="right">3</td>
+<td align="right">89</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs1891905</td>
+<td align="right">4</td>
+<td align="right">89</td>
+<td align="right">-0.1053</td>
+<td align="right">0.3165</td>
+<td align="right">0.001272</td>
+<td align="right">-0.3328</td>
+<td align="right">0.7401</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs9729550</td>
+<td align="right">5</td>
+<td align="right">89</td>
+<td align="right">0.5402</td>
+<td align="right">0.4616</td>
+<td align="right">0.015500</td>
+<td align="right">1.1700</td>
+<td align="right">0.2451</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs3813196</td>
+<td align="right">6</td>
+<td align="right">89</td>
+<td align="right">0.8053</td>
+<td align="right">1.0250</td>
+<td align="right">0.007050</td>
+<td align="right">0.7859</td>
+<td align="right">0.4340</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>quant3.qassoc  &lt;- read.table(&quot;quant3.qassoc&quot;,header = T)
+knitr::kable(head(quant3.qassoc),&quot;markdown&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">CHR</th>
+<th align="left">SNP</th>
+<th align="right">BP</th>
+<th align="right">NMISS</th>
+<th align="right">BETA</th>
+<th align="right">SE</th>
+<th align="right">R2</th>
+<th align="right">T</th>
+<th align="right">P</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs6681049</td>
+<td align="right">1</td>
+<td align="right">89</td>
+<td align="right">-0.2266</td>
+<td align="right">0.3626</td>
+<td align="right">0.004469</td>
+<td align="right">-0.6249</td>
+<td align="right">0.5336</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs4074137</td>
+<td align="right">2</td>
+<td align="right">89</td>
+<td align="right">-0.2949</td>
+<td align="right">0.6005</td>
+<td align="right">0.002765</td>
+<td align="right">-0.4911</td>
+<td align="right">0.6246</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs7540009</td>
+<td align="right">3</td>
+<td align="right">89</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs1891905</td>
+<td align="right">4</td>
+<td align="right">89</td>
+<td align="right">-0.1053</td>
+<td align="right">0.3165</td>
+<td align="right">0.001272</td>
+<td align="right">-0.3328</td>
+<td align="right">0.7401</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rs9729550</td>
+<td align="right">5</td>
+<td align="right">89</td>
+<td align="right">0.5402</td>
+<td align="right">0.4616</td>
+<td align="right">0.015500</td>
+<td align="right">1.1700</td>
+<td align="right">0.2451</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rs3813196</td>
+<td align="right">6</td>
+<td align="right">89</td>
+<td align="right">0.8053</td>
+<td align="right">1.0250</td>
+<td align="right">0.007050</td>
+<td align="right">0.7859</td>
+<td align="right">0.4340</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>d &lt;- read.table(&quot;rec_snp1.recode.raw&quot; , header=T)
+summary(glm(PHENOTYPE-1 ~ rs2222162_1, data=d, family=&quot;binomial&quot;))</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = PHENOTYPE - 1 ~ rs2222162_1, family = &quot;binomial&quot;, 
+##     data = d)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.7690  -1.1042  -0.5848   0.6851   1.9238  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)   1.3300     0.4107   3.238   0.0012 ** 
+## rs2222162_1  -1.5047     0.3765  -3.997 6.42e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 123.37  on 88  degrees of freedom
+## Residual deviance: 102.64  on 87  degrees of freedom
+## AIC: 106.64
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+</div>
 </div>
 
 

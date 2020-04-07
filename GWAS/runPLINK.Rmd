@@ -12,7 +12,10 @@ output:
 bibliography: bibliography.ris
 ---
 
-## GWAS
+## Assignment 10 GWAS
+### Genome-wide association studies (GWAS) use dense maps of SNPs that cover the human genome to look for allele-frequency differences between cases (patients with a specific disease or individuals with a certain trait) and controls.[@1] A significant frequency difference is taken to indicate that the corresponding region of the genome contains functional DNA-sequence variants that influence the disease or trait in question. [@2]
+### The below example are using PLINK to analyse a dummy data of randomly selected genotypes from the 89 Asian HapMap individuals. We perform data management, summary statistics populationstratification and basic association analysis.[@3] In this research, a phenotype has been simulated based on the genotype at one SNP, roughl 80,000 autosomal SNPs are being analysised. 
+
 
 
 ```{bash,results = 'hide'}
@@ -33,7 +36,11 @@ plink --bfile hapmap1 --assoc --out as1
 sort --key=7 -nr as1.assoc | head
 plink --bfile hapmap1 --assoc --adjust --out as2
 more as2.assoc.adjusted
+```
+```{bash}
 plink --bfile hapmap1 --pheno pop.phe --assoc --adjust --out as3
+```
+```{bash, results = 'hide'}
 plink --bfile hapmap1 --model --snp rs2222162 --out mod1
 plink --bfile hapmap1 --model --cell 0 --snp rs2222162 --out mod2
 plink --bfile hapmap1 --cluster --mc 2 --ppc 0.05 --out str1
@@ -61,10 +68,47 @@ plink --bfile hapmap1 --pheno qt.phe --gxe --covar pop.phe --snp rs2222162 --out
 plink --bfile hapmap1 --snp rs2222162 --recodeAD --out rec_snp1.recode
 ```
 ```{r}
+ss <- read.table("miss_stat.lmiss",header = T)
+knitr::kable(head(ss),"markdown")
+i <- read.table("miss_stat.imiss",header = T)
+knitr::kable(head(i),"markdown")
+```
+```{r}
+f <- read.table("freq_stat.frq.strat",header = T)
+knitr::kable(head(f),"markdown")
+a <- read.table("as1.assoc",header = T)
+knitr::kable(head(a),"markdown")
+as <- read.table("as2.assoc.adjusted",header = T)
+knitr::kable(head(as),"markdown")
+as3 <- read.table("as3.assoc.adjusted",header = T)
+knitr::kable(head(as3),"markdown")
+```
+```{r}
+aac <- read.table("aac1.cmh.adjusted",header = T)
+knitr::kable(head(aac),"markdown")
+aac2 <- read.table("aac2.cmh.adjusted",header = T)
+knitr::kable(head(aac2),"markdown")
+aac3 <- read.table("aac3.cmh.adjusted",header = T)
+knitr::kable(head(aac3),"markdown")
+m <- read.table("mod1.model",header = T)
+knitr::kable(m, "markdown")
+m <- read.table("mod2.model",header = T)
+knitr::kable(m, "markdown")
+```
+
+```{r}
+quant1.qassoc  <- read.table("quant1.qassoc",header = T)
+knitr::kable(head(quant1.qassoc),"markdown")
+quant2.qassoc  <- read.table("quant2.qassoc",header = T)
+knitr::kable(head(quant2.qassoc),"markdown")
+quant3.qassoc  <- read.table("quant3.qassoc",header = T)
+knitr::kable(head(quant3.qassoc),"markdown")
+
+```
+
+```{r}
 d <- read.table("rec_snp1.recode.raw" , header=T)
 summary(glm(PHENOTYPE-1 ~ rs2222162_1, data=d, family="binomial"))
-s <- read.table("miss_stat.lmiss",header = T)
-knitr::kable(head(s),"markdown")
 ```
 
 
